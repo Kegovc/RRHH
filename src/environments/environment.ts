@@ -4,5 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  sso: '//172.24.115.143/SSO/',
+  api: '//172.24.115.143/RRHHSystem/api/'
 };

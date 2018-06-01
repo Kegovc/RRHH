@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  sso: '//portal/SSO/',
+  api: '//172.24.115.143/RRHH/api/'
 };
