@@ -14,26 +14,15 @@ export class SessionGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    this.sessionStatus();
-    return true;
+    return this.authService.isLoggedIn();
   }
 
   sessionStatus() {
-    this.authService.haveAccess()
-    .then(response => {
-      console.log(response);
-      if (!response.fun.access) {
-        switch (response.fun.execute) {
-          case 'toSSO': {
-            // window.location.href = environment.sso;
-            break;
-          }
-          case 'logon': {
-            // window.location.href = `${environment.sso}close`;
-            break;
-          }
-        }
-      }
-    });
+    if (!this.authService.isLoggedIn()) {
+      window.location.href = `${environment.sso}`;
+      return false;
+    }
+    return true;
   }
 }
+

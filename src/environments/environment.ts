@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  sso: '//172.24.115.143/SSO/',
-  api: '//172.24.115.143/RRHHSystem/api/'
+  sso: '//localhost/SSO/',
+  api: '//localhost/RRHHSystem/api/'
 };

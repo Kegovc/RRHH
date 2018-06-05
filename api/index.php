@@ -1,7 +1,8 @@
 <?php
+session_start();
+
 require 'db_controller.php';
 date_default_timezone_set("America/Mexico_City");
-session_start();
 
 class request{
 
@@ -89,7 +90,7 @@ function ObtenerNavegador($user_agent) {
     'Internet Explorer 4' => '(MSIE 4\.[0-9]+)',
       );
       foreach($navegadores as $navegador=>$pattern){
-             if (eregi($pattern, $user_agent))
+             if (strtoupper($pattern)==strtoupper($user_agent))
              return $navegador;
           }
       return 'Desconocido';
@@ -98,10 +99,11 @@ function ObtenerNavegador($user_agent) {
 function set_header(){
   if (isset($_SERVER['HTTP_ORIGIN'])) {
       header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+      header('Content-Type: text/html; charset=UTF-8');
       //If required
       header('Access-Control-Allow-Credentials: true');
       header('Access-Control-Max-Age: 86400');    // cache for 1 day
-  }
+    }
   if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
@@ -117,37 +119,38 @@ function set_header(){
 function fun_api($api){
 
         if (function_exists($api->app)){
-               return (auth_session())?call_user_func($api->app,$api->param):attack_set();
+               return call_user_func($api->app,$api->param);
         }
 }
 
-function auth_session(){
-  return isset($_SESSION['nuser']);
-}
 
 function attack_set(){
-  $atk="Call sso_attack_add('USUARIO NO AUTENTIFICADO','$ip','".ObtenerNavegador($_SERVER['HTTP_USER_AGENT'])."','SE INTENTO ACCEDER SIN INICIAR SECCION','')";
+  $ip = get_ip();
+  $atk="Call sso.sso_attack_add('USUARIO NO AUTENTIFICADO','$ip','".ObtenerNavegador($_SERVER['HTTP_USER_AGENT'])."','SE INTENTO ACCEDER SIN INICIAR SECCION','')";
   dbquery($atk);
-  return array("access"=>false,"execute"=>"toSSO");
+  return array("access"=>false,"execute"=>"toSSO","msn"=>"not_logged");
 }
 
 function guard_session($param){
   $apps = $param['apps'];
   $url = $param['url'];
-  $ip = get_ip();
-
-      $qq="call sso.sso_isValidPermissions ('".$_SESSION['nuser']."', '".$apps."', '".$url."',@p,@r,@m)";
+  $token = $param['accessToken'];
+  print_r($param);
+      $qq="call sso.sso_isValidPermissionsByToken ('".$token."', '".$apps."', '".$url."',@p,@r,@m)";
+      echo $qq;
       $rowqq=array();
-      dbquery_call($qq,"select @r,@m,@p",$rowqq);
+      $error;
+      dbquery_call($qq,"select @r,@m,@p",$rowqq,$error);
+      echo $error;
         if($rowqq['@r']==2){ // sin permisos
           $_SESSION['error_profile']=$rowqq['@m'];
-          return array("access"=>false,"execute"=>"toSSO");
+          return array("access"=>false,"execute"=>"toSSO","msn"=>"not_permission");
         }
         if($rowqq['@r']==100){ //time_out
               $_SESSION['error_profile']=$rowqq['@m'];
-              return array("access"=>false,"execute"=>"logon");
+              return array("access"=>false,"execute"=>"logoff","msn"=>"time_out");
         }
-        return array("access"=>true,"execute"=>"logon");
+        return array("access"=>true);
 
 
 
@@ -158,9 +161,7 @@ $_sys;
 $_sys= new request();
 set_header();
 $_sys->param['apps'] = "recursoshumanos";//<---  deposita la app que usamos
-
-
-echo json_encode(array("session"=>$_SESSION,"_sys"=>$_sys, "fun" =>fun_api($_sys)));
+echo json_encode(array("_sys"=>$_sys, "fun" =>fun_api($_sys)));
 
 
 
