@@ -8,10 +8,10 @@
 
     <div class="collapse navbar-collapse" id="navbarColor02" [collapse]=isCollapsed >
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item" id="Inicio">
+        <li class="nav-item Inicio" [ActiveNavItem]="navitem">
           <a class="nav-link" routerLink="">Inicio <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item" id="Empleados">
+        <li class="nav-item Empleados" [ActiveNavItem]="navitem">
           <div class="btn-group" dropdown>
             <span id="button-disabled-item" dropdownToggle class="nav-link dropdown-toggle"
                     aria-controls="dropdown-disabled-item">
@@ -32,13 +32,13 @@
 
 
 
-        <li class="nav-item" id="Reportes">
+        <li class="nav-item Reportes" [ActiveNavItem]="navitem">
           <a class="nav-link" routerLink="Reportes">Reportes</a>
         </li>
-        <li class="nav-item" id="Vacaciones">
+        <li class="nav-item Vacaciones" [ActiveNavItem]="navitem">
           <a class="nav-link" routerLink="Vacaciones">Vacaciones</a>
         </li>
-        <li class="nav-item" id="Catalogos">
+        <li class="nav-item Catalogos" [ActiveNavItem]="navitem">
           <a class="nav-link" routerLink="Catalogos">Catalogos</a>
         </li>
       </ul>

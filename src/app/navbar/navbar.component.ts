@@ -10,7 +10,7 @@ import { Router, Event, NavigationStart} from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   public isCollapsed = true;
-
+  public navitem = '';
   public user: any = {};
 
   constructor(

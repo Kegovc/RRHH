@@ -15,6 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { routing } from './app.routing';
 import { LogoffComponent } from './logoff/logoff.component';
 import { AdministracionComponent } from './empleados/administracion/administracion.component';
+import { ActiveNavItemDirective } from './shared/directives/active-nav-item.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +23,7 @@ import { AdministracionComponent } from './empleados/administracion/administraci
     HomeComponent,
     LogoffComponent,
     AdministracionComponent,
+    ActiveNavItemDirective,
   ],
   imports: [
     BrowserModule,
