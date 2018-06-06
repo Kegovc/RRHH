@@ -123,8 +123,20 @@ function fun_api($api){
         }
 }
 
+function get_profile($param){
+  $app = $param['apps'];
+  $token = $param['accessToken'];
+  $q_profile="select  distinct(profile) as profi,permissions,nombre from `sso`.`view_profile_token` WHERE  app = '$app' and accessToken = '$token';";
+  $result = dbquery($q_profile);
+  if($result->num_rows>0){
+    $row = mysqli_fetch_assoc($result);
+    $row['fecha']=date("d-M-Y");
+    return array('access'=>true,"ls"=>$row);
+  }
+  return array('access'=> false, 'execute'=>'toSSO');
+}
 
-function attack_set(){
+function attack_set($param){
   $ip = get_ip();
   $atk="Call sso.sso_attack_add('USUARIO NO AUTENTIFICADO','$ip','".ObtenerNavegador($_SERVER['HTTP_USER_AGENT'])."','SE INTENTO ACCEDER SIN INICIAR SECCION','')";
   dbquery($atk);
@@ -135,13 +147,11 @@ function guard_session($param){
   $apps = $param['apps'];
   $url = $param['url'];
   $token = $param['accessToken'];
-  print_r($param);
       $qq="call sso.sso_isValidPermissionsByToken ('".$token."', '".$apps."', '".$url."',@p,@r,@m)";
-      echo $qq;
       $rowqq=array();
       $error;
       dbquery_call($qq,"select @r,@m,@p",$rowqq,$error);
-      echo $error;
+      //print_r($rowqq);
         if($rowqq['@r']==2){ // sin permisos
           $_SESSION['error_profile']=$rowqq['@m'];
           return array("access"=>false,"execute"=>"toSSO","msn"=>"not_permission");

@@ -1,42 +1,60 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">
+      <img src="assets/logo.png" height="40" alt="">
+    </a>
     <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" aria-expanded="false" >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor02" [collapse]=isCollapsed >
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item" id="Inicio">
+          <a class="nav-link" routerLink="">Inicio <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
+        <li class="nav-item" id="Empleados">
+          <div class="btn-group" dropdown>
+            <span id="button-disabled-item" dropdownToggle class="nav-link dropdown-toggle"
+                    aria-controls="dropdown-disabled-item">
+                    Empleados <span class="caret"></span>
+            </span>
+            <ul id="dropdown-disabled-item" *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-disabled-item">
+              <li role="menuitem"><a class="dropdown-item" routerLink="Empleados/Administracion">Administracion</a></li>
+              <li role="menuitem"><a class="dropdown-item" routerLink="Empleados/Datos-Medicos">Datos Medicos</a></li>
+              <li role="menuitem"><a class="dropdown-item" routerLink="Empleados/CV">CV</a></li>
+              <li role="menuitem"><a class="dropdown-item" routerLink="Empleados/Expediente">Expediente</a></li>
+              <li role="menuitem"><a class="dropdown-item" routerLink="Empleados/Familia">Familia</a></li>
+            </ul>
+          </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+
+
+
+
+
+        <li class="nav-item" id="Reportes">
+          <a class="nav-link" routerLink="Reportes">Reportes</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+        <li class="nav-item" id="Vacaciones">
+          <a class="nav-link" routerLink="Vacaciones">Vacaciones</a>
+        </li>
+        <li class="nav-item" id="Catalogos">
+          <a class="nav-link" routerLink="Catalogos">Catalogos</a>
         </li>
       </ul>
       <div class="btn-group" dropdown>
           <button id="button-split" type="button" dropdownToggle class="btn btn-danger dropdown-toggle dropdown-toggle-split"
                   aria-controls="dropdown-split">
-                  {{user.name}}
+                  {{user.nombre}}
                   <fa name="user" size="lg" ></fa>
             <span class="caret"></span>
             <span class="sr-only">Split button!</span>
           </button>
           <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right"
               role="menu" aria-labelledby="button-split">
-            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a>
-            </li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Something else
-              here</a></li>
-            <li class="divider dropdown-divider"></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-            </li>
+              <li role="menuitem"><span class="dropdown-item">{{user.fecha}}</span></li>
+              <li role="menuitem"><span class="dropdown-item">{{user.profi}}</span></li>
+            <li role="menuitem"><a class="dropdown-item" routerLink="/logoff">Cerrar Session</a></li>
           </ul>
         </div>
     </div>

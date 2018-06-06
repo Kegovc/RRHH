@@ -13,11 +13,15 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
 import { routing } from './app.routing';
+import { LogoffComponent } from './logoff/logoff.component';
+import { AdministracionComponent } from './empleados/administracion/administracion.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
+    LogoffComponent,
+    AdministracionComponent,
   ],
   imports: [
     BrowserModule,

@@ -12,11 +12,19 @@ export class AuthService {
   ) { }
 
   attackSet() {
-    return this.http.get(`${environment.api}`)
+    return this.http.get(`${environment.api}attack_set`)
     .map(response => response.json())
     .toPromise();
   }
-
+  getProfile() {
+    const data = {
+      accessToken: this.getToken()
+    };
+    const url = `${environment.api}get_profile`;
+    return this.http.post(url , data)
+    .map(response => response.json())
+    .toPromise();
+  }
   haveAccess() {
     const data = {
       url: window.location.pathname,
@@ -24,10 +32,7 @@ export class AuthService {
     };
     const url = `${environment.api}guard_session`;
     return this.http.post(url , data)
-    .map(response => {
-      console.log(response);
-      return response.json();
-    })
+    .map(response => response.json())
     .toPromise();
   }
   getToken() {
@@ -38,5 +43,18 @@ export class AuthService {
   }
   isLoggedIn() {
     return !!this.getToken();
+  }
+  executeAccess(execute) {
+    switch (execute) {
+      case 'toSSO': {
+        // window.location.href = environment.sso;
+        break;
+      }
+      case 'logoff': {
+        this.clearToken();
+        // window.location.href = `${environment.sso}close`;
+        break;
+      }
+    }
   }
 }
