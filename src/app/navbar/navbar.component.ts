@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { AuthService } from './../shared/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, Event, NavigationStart} from '@angular/router';
@@ -10,8 +11,9 @@ import { Router, Event, NavigationStart} from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   public isCollapsed = true;
-  public navitem = '';
+  public navItem = 'hola';
   public user: any = {};
+  public urlSSO = environment.sso;
 
   constructor(
     private authService: AuthService,
@@ -19,17 +21,16 @@ export class NavbarComponent implements OnInit {
   ) {
     router.events.subscribe( (event: Event) => {
       if (event instanceof NavigationStart) {
-        console.log(event.url);
-        const arrayURL = event.url.split('/');
-        console.log(arrayURL);
+        this.urlActive(event.url);
       }
     });
+    this.urlActive(window.location.pathname);
   }
 
   ngOnInit() {
     this.authService.getProfile()
-    .then(response => {
-      console.log(response);
+    .then((response: any) => {
+      if (environment.debug) { console.log(response); }
       if (!response.fun.access) {
         this.authService.executeAccess(response.fun.execute);
       } else {
@@ -38,4 +39,11 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  urlActive(url: string) {
+    const arrayURL = url.split('/');
+        if (arrayURL[1] === '') {
+          arrayURL[1] = 'Inicio';
+        }
+        this.navItem = arrayURL[1];
+  }
 }

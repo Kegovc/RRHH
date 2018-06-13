@@ -1,51 +1,22 @@
 <?php
+$str= "select distinct(app),name from `sso`.`view_sso_profile` WHERE email='".$_SESSION['nuser']."' order by app asc";
+$result=mysql_query($str);
+while ($row = mysql_fetch_array($result)) { ?>
+<li>
+    <a href="javascript:void(0);" onclick="abrirCerrar('<?php echo $row['app']; ?>li')"><?php echo $row['name']; ?></a>
+    <ul class="nav" id="<?php echo $row['app']; ?>li" style="display: none;">
+        <?php
+        $substr="select app,url from `sso`.`view_sso_profile` WHERE email='".$_SESSION['nuser']."' and app='".$row['app']."'";
+        $subresult=  mysql_query($substr)or die(mysql_er);
+        while ($row1 = mysql_fetch_array($subresult)) {
+                $leng=strlen($row1['url']);
+                if($leng>1&&$row1['url'][$leng-1]=='*'){
+                   $row1['url']=substr($row1['url'],0,$leng-1);
+                }?>
+            <li><a href="<?php echo $rhome.$row1['app'].$row1['url'];?>"><?php echo $row1['url']; ?></a></li>
+        <?php }
+        ?>
+    </ul>
+</li>
+<?php }
 
-
-
-
-
-if(!isset($_GET['url']))
-	{
-        error_reporting(E_ALL);
-    }
-else
-{
-	$v = new request();
-}
-if(isset($_SESSION['nuser'])){
-
-    $query="select distinct(profile) as profi,permissions from `sso`.`view_sso_profile` WHERE email='".$_SESSION['nuser']."'";
-    $result=  mysql_query($query);
-    while ($sta = mysql_fetch_array($result)) {
-        $profile=$sta['profi'];
-        $tipoprofil=$sta['permissions'];
-    }
-}
-?>
-
-                      <?php
-                        $query="select distinct(profile),permissions from `sso`.`view_sso_profile` WHERE email='".$_SESSION['nuser']."'";
-                        $result=  mysql_query($query);
-                        while ($sta = mysql_fetch_array($result)) {
-                            $profile=$sta[0];
-                            $tipoprofil=$sta[1];
-                        }
-                        $query= mysql_query("SELECT nombre FROM sso.sso_usr where email='".$_SESSION['nuser']."'");
-                        while ($row = mysql_fetch_array($query)) {
-                            $nname=$row[0];
-                        }
-                      ?>
-
-                      <ul>
-                      <h5>Hola: <?php echo $nname; ?></h5>
-                      <p>
-                      <h5>Fecha:  <?php echo date("d-M-Y"); ?></h5>
-                      <p>
-                      <h5>STA:  <?php echo $profile;?></h5>
-                      <p>
-                          <a href="<?php echo $sso;?>close" style="color: black;"><span class="label label-danger">Cerrar Sesión</span></a>
-                      </ul>
-
- <?php
-                include $hview."btp_quick_nav.php";
-               ?>

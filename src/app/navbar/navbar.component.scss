@@ -1,3 +1,10 @@
 .navbar{
   background-color: #489ed5!important;
+  .active{
+    .btn-group{
+      .nav-link{
+        color: #fff;
+      }
+    }
+  }
 }

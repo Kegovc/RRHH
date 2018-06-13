@@ -9,7 +9,8 @@ import { Router, Event, NavigationStart} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent  {
-  public loading = false;
+  public loading = true;
+  public data: any = {};
   constructor(
     private authService: AuthService,
     private router: Router
@@ -17,16 +18,15 @@ export class AppComponent  {
     router.events.subscribe( (event: Event) => {
       if (event instanceof NavigationStart) {
         this.checkingPermissions();
-        console.log(event.url);
       }
     });
   }
 
 
   checkingPermissions() {
-    this.authService.haveAccess()
-  .then(response => {
-    console.log(response);
+   this.authService.haveAccess()
+  .then((response: any) => {
+    if (environment.debug) { console.log(response); }
     if (!response.fun.access) {
       this.authService.executeAccess(response.fun.execute);
     } else {
@@ -34,4 +34,5 @@ export class AppComponent  {
     }
   });
   }
+
 }

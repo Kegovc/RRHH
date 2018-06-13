@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="{{urlSSO}}">
       <img src="assets/logo.png" height="40" alt="">
     </a>
     <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" aria-expanded="false" >
@@ -8,10 +8,10 @@
 
     <div class="collapse navbar-collapse" id="navbarColor02" [collapse]=isCollapsed >
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item Inicio" [ActiveNavItem]="navitem">
+        <li class="nav-item"  id="Inicio" [ActiveNavItem]="navItem">
           <a class="nav-link" routerLink="">Inicio <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item Empleados" [ActiveNavItem]="navitem">
+        <li class="nav-item"  id="Empleados" [ActiveNavItem]="navItem">
           <div class="btn-group" dropdown>
             <span id="button-disabled-item" dropdownToggle class="nav-link dropdown-toggle"
                     aria-controls="dropdown-disabled-item">
@@ -32,17 +32,17 @@
 
 
 
-        <li class="nav-item Reportes" [ActiveNavItem]="navitem">
+        <li class="nav-item"  id="Reportes" [ActiveNavItem]="navItem">
           <a class="nav-link" routerLink="Reportes">Reportes</a>
         </li>
-        <li class="nav-item Vacaciones" [ActiveNavItem]="navitem">
+        <li class="nav-item"  id="Vacaciones" [ActiveNavItem]="navItem">
           <a class="nav-link" routerLink="Vacaciones">Vacaciones</a>
         </li>
-        <li class="nav-item Catalogos" [ActiveNavItem]="navitem">
+        <li class="nav-item"  id="Catalogos" [ActiveNavItem]="navItem">
           <a class="nav-link" routerLink="Catalogos">Catalogos</a>
         </li>
       </ul>
-      <div class="btn-group" dropdown>
+      <div class="btn-group" dropdown *ngIf="user.nombre">
           <button id="button-split" type="button" dropdownToggle class="btn btn-danger dropdown-toggle dropdown-toggle-split"
                   aria-controls="dropdown-split">
                   {{user.nombre}}

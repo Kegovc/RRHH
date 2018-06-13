@@ -1,40 +1,38 @@
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { Http, Headers} from '@angular/http';
-// tslint:disable-next-line:import-blacklist
-import 'rxjs/Rx';
+import { HttpClient } from '@angular/common/http';
+import {Cookie} from 'ng2-cookies';
 
 @Injectable()
 export class AuthService {
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) { }
-
+  // WEB API
   attackSet() {
     return this.http.get(`${environment.api}attack_set`)
-    .map(response => response.json())
     .toPromise();
   }
+
   getProfile() {
     const data = {
       accessToken: this.getToken()
     };
     const url = `${environment.api}get_profile`;
     return this.http.post(url , data)
-    .map(response => response.json())
     .toPromise();
   }
   haveAccess() {
     const data = {
-      url: window.location.pathname,
       accessToken: this.getToken()
-    };
+    }; //  Cookie.get('access_token');
     const url = `${environment.api}guard_session`;
     return this.http.post(url , data)
-    .map(response => response.json())
     .toPromise();
   }
+
+  // LocalStorage
   getToken() {
     return localStorage.getItem('tokenAccess');
   }
@@ -45,6 +43,7 @@ export class AuthService {
     return !!this.getToken();
   }
   executeAccess(execute) {
+    if (environment.debug) { console.log(execute); }
     switch (execute) {
       case 'toSSO': {
         // window.location.href = environment.sso;
@@ -55,6 +54,8 @@ export class AuthService {
         // window.location.href = `${environment.sso}close`;
         break;
       }
+      default:
+        break;
     }
   }
 }
