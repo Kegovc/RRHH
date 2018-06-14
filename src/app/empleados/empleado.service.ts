@@ -30,4 +30,9 @@ export class EmpleadoService {
     return this.http.post(`${environment.api}${get}`, { index: index, accessToken: this.authService.getToken()})
     .toPromise();
   }
+  getDataMedicoEmpleado(data: any) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}get_datos_medicos_empleados`, data)
+    .toPromise();
+  }
 }

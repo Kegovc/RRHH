@@ -1,4 +1,3 @@
-import { element } from 'protractor';
 import { map } from 'rxjs/operators';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -14,8 +13,8 @@ import { EmpleadoService } from './../empleado.service';
   styleUrls: ['./administracion.component.scss']
 })
 export class AdministracionComponent implements OnInit {
-
-  public load = false;
+  public proceso = 0;
+  public load = true;
   public  modalRef: BsModalRef;
   public data: any = {
     cia:  '',
@@ -72,10 +71,7 @@ export class AdministracionComponent implements OnInit {
     medio_transporte:  ''
   };
   public empleados: any[];
-  public element = 'navbar';
-  public empleadoForm: FormGroup;
-  public errorMessages: any = {};
-  public selectedEmpleadoId = '0';
+  public selectedEmpleadoId: number;
   public index =  0;
   public inputs = [
     {label: 'Empresa', name: 'cia', type: 'id->', values: 'get_empresas', on: '', disable: true},
@@ -101,8 +97,8 @@ export class AdministracionComponent implements OnInit {
     {label: 'ESTADO DE NACIMIENTO', name: 'estado_nacimiento', type: 'estado', values: 'get_estados', on: 'ciudad_nacimiento', disable: true},
     {label: 'CIUDAD DE NACIMIENTO', name: 'ciudad_nacimiento', type: 'local', values: 'get_municipios', on: '', disable: true},
     {label: 'NSS', name: 'numero_ss', type: 'num', values: '', on: '', disable: false},
-    {label: 'INFONAVIT', name: 'numero_infonavit', type: 'text', values: '', on: '', disable: false},
-    {label: 'RFC', name: 'rfc', type: 'num', values: '', on: '', disable: false},
+    {label: 'INFONAVIT', name: 'numero_infonavit', type: 'num', values: '', on: '', disable: false},
+    {label: 'RFC', name: 'rfc', type: 'text', values: '', on: '', disable: false},
     {label: 'CURP', name: 'curp', type: 'text', values: '', on: '', disable: false},
     {label: 'TIPO DE SANGRE', name: 'tsangre', type: 'id->', values: 'get_sangre', on: '', disable: true},
     {label: 'NIVEL ACADEMICO', name: 'nivel_estudios', type: 'id->', values: 'get_estudios', on: '', disable: true},
@@ -139,8 +135,10 @@ export class AdministracionComponent implements OnInit {
     private authService: AuthService,
     private modalService: BsModalService,
   ) {
+    this.selectedEmpleadoId = 0;
     this.empleadoService.getEmpleados()
     .then((response: any) => {
+      this.proceso++;
       if (environment.debug) { console.log(response); }
       if (response.fun.access) {
         this.empleados = response.fun.ls;
@@ -178,33 +176,26 @@ export class AdministracionComponent implements OnInit {
 
   }
 
-  sendEmpleado() {
-    // tslint:disable-next-line:no-var-keyword
-    console.log('Form: ', this.empleadoForm);
-    if (!this.empleadoForm.valid) {
-      console.log('Error: ', this.errorMessages);
-      return;
-    } else {
-    }
-  }
 
   openModal(template: TemplateRef<any>) {
+    if (environment.debug) { console.log(this.selectedEmpleadoId === 0); }
+    if (environment.debug) { console.log(!this.selectedEmpleadoId); }
     this.modalRef = this.modalService.show(template);
   }
 
   confirm(): void {
     this.data.fingreso = this.getFecha(this.data.fingreso_);
     this.data.fnacimiento = this.getFecha(this.data.fnacimiento_);
-    console.log(this.data);
+    if (environment.debug) { console.log(this.data); }
     this.empleadoService.setEmpleado(this.data)
     .then((response: any) => {
-      console.log(response);
+      if (environment.debug) { console.log(response); }
       if (response.fun.access) {
         window.location.reload();
       }
+      this.modalRef.hide();
     });
-    this.modalRef.hide();
-    console.log(this.data);
+    if (environment.debug) { console.log(this.data); }
   }
 
   decline(): void {
@@ -212,20 +203,20 @@ export class AdministracionComponent implements OnInit {
   }
 
   loadEmpleado(empleado) {
-    console.log(empleado);
+    if (environment.debug) { console.log(empleado); }
     if (empleado > 0) {
       this.load = true;
       this.empleadoService.getEmpleado({index: empleado})
         .then((response: any) => {
           if (environment.debug) { console.log(response); }
           if (response.fun.access) {
-            console.log(response.fun.extras);
+            if (environment.debug) { console.log(response.fun.extras); }
             // tslint:disable-next-line:forin
             Object.keys(response.fun.ls).forEach((key, index) => {
-              console.log(`${key} ${response.fun.ls[key]}`);
+              if (environment.debug) { console.log(`${key} ${response.fun.ls[key]}`); }
               if (response.fun.extras !== null) {
                 if (key in response.fun.extras) {
-                  console.log(response.fun.extras[key]);
+                  if (environment.debug) {  console.log(response.fun.extras[key]); }
                   // tslint:disable-next-line:no-shadowed-variable
                   const index = this.inputs.indexOf(this.inputs.find((element) => element.name === key));
                   this.inputs[index].disable = false;
@@ -234,7 +225,7 @@ export class AdministracionComponent implements OnInit {
               }
               this.data[key] = response.fun.ls[key];
             });
-            console.log(this.data);
+            if (environment.debug) { console.log(this.data); }
             let fecha_a = `${this.data.fingreso}`.split('-');
             this.data.fingreso_ = new Date(Number(fecha_a[0]), Number(fecha_a[1]) - 1, Number(fecha_a[2]));
             fecha_a = `${this.data.fnacimiento}`.split('-');
@@ -248,9 +239,9 @@ export class AdministracionComponent implements OnInit {
   }
 
   onChangeLocalidad(hijo, padre) {
-    console.log(`${hijo} ${this.data[padre]}`);
+    if (environment.debug) { console.log(`${hijo} ${this.data[padre]}`); }
     // tslint:disable-next-line:no-shadowed-variable
-    console.log(this.inputs.find((element) => element.name === padre));
+    if (environment.debug) { console.log(this.inputs.find((element) => element.name === padre)); }
     // tslint:disable-next-line:no-shadowed-variable
     const index = this.inputs.indexOf(this.inputs.find((element) => element.name === hijo));
     const get = 'get_municipios';
@@ -266,7 +257,7 @@ export class AdministracionComponent implements OnInit {
     .catch(error => {
       console.log(`${error}  ${get}`);
     });
-    console.log(this.inputs[index]);
+    if (environment.debug) { console.log(this.inputs[index]); }
   }
 
   getData(get: string, index: number) {
@@ -283,10 +274,14 @@ export class AdministracionComponent implements OnInit {
       case 'get_bancos':
         this.empleadoService.getData(get)
           .then((response: any) => {
+            this.proceso++;
             if (environment.debug) { console.log(response); }
             if (response.fun.access) {
               this.inputs[index].values = response.fun.ls;
               this.inputs[index].disable = false;
+            }
+            if (this.proceso === 13) {
+              this.load = false;
             }
           })
           .catch(error => {

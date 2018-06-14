@@ -19,6 +19,15 @@ import { AdministracionComponent } from './empleados/administracion/administraci
 import { ActiveNavItemDirective } from './shared/directives/active-nav-item.directive';
 import { MyNumberOnlyDirective } from './shared/directives/my-number-only.directive';
 import { DoDisbledDirective } from './shared/directives/do-disbled.directive';
+import { DatosMedicosComponent } from './empleados/datos-medicos/datos-medicos.component';
+import { FamiliaComponent } from './empleados/familia/familia.component';
+
+
+
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +38,8 @@ import { DoDisbledDirective } from './shared/directives/do-disbled.directive';
     ActiveNavItemDirective,
     MyNumberOnlyDirective,
     DoDisbledDirective,
+    DatosMedicosComponent,
+    FamiliaComponent,
   ],
   imports: [
     BrowserModule,

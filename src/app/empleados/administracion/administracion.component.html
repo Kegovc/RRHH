@@ -18,7 +18,7 @@
 
 <div class="row" *ngIf="load">
     <div class="col-sm-10 offset-sm-1">
-        <progressbar max="1" [value]="1" type="danger" [striped]="true" [animate]="true"></progressbar>
+        <progressbar max="13" [value]="proceso" type="danger" [striped]="true" [animate]="true"></progressbar>
     </div>
     <br>
   </div>
@@ -64,7 +64,7 @@
       </div>
       <div class="modal-body">
       <p>¿Esta seguro que quiere grabar estos datos?</p>
-      <div *ngIf="selectedEmpleadoId==0">Se le asignara un correo temporal 'wwwtemp0@GFMEGA.COM', Favor de contactar a Sistemas para la continuacion del proceso</div>
+      <div *ngIf="!(selectedEmpleadoId)">Se le asignara un correo temporal 'wwwtemp0@GFMEGA.COM', Favor de contactar a Sistemas para la continuacion del proceso</div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" (click)="decline()" style="float: left;">No</button>
             <button type="button" class="btn btn-primary" (click)="confirm()"  style="float: right;">Si</button>

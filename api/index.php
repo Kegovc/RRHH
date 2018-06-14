@@ -479,7 +479,35 @@ function get_bancos($param){
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
 
+function get_datos_medicos_empleados($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    $qDM = "select * FROM rh.view_datos_medicos where id_emp = '$id' ;";
+    $result = dbquery($qDM);
+    $array=array();
+    while($row = mysqli_fetch_assoc($result)){
+      foreach($row as $key => $value){
+        $row[$key] = utf8_decode($value);
+      }
+      $array[] = $row;
+    }
+    $datos_medicos=$array;
+    $qDM = "select * FROM rh.view_parentesco where id_empleado = '$id' ;";
+    $result = dbquery($qDM);
+    $array=array();
+    while($row = mysqli_fetch_assoc($result)){
+      foreach($row as $key => $value){
+        $row[$key] = utf8_decode($value);
+      }
+      $array[] = $row;
+    }
+    $parentescos=$array;
 
+    return array('access'=> true, 'ls'=>array("dm"=>$datos_medicos, "fm"=>$parentescos));
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
 
 function get_municipios($param){
   $token = $param['accessToken'];
