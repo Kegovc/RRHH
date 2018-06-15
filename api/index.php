@@ -134,6 +134,64 @@ function fun_api($api){
         }
 }
 
+// auth function
+
+function get_profile($param){
+  $app = $param['apps'];
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $q_profile="select  distinct(profile) as profi,permissions,nombre from `sso`.`view_profile_token` WHERE  app = '$app' and accessToken = '$token';";
+    $result = dbquery($q_profile);
+    if($result->num_rows>0){
+      $row = mysqli_fetch_assoc($result);
+      $row['fecha']=date("d-M-Y");
+      return array('access'=>true,"ls"=>$row);
+    }
+    return array('access'=> false, 'execute'=>'toSSO',"extras"=>$result);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function attack_set($param){
+  $ip = get_ip();
+  $atk="Call sso.sso_attack_add('USUARIO NO AUTENTIFICADO','$ip','".ObtenerNavegador($_SERVER['HTTP_USER_AGENT'])."','SE INTENTO ACCEDER SIN INICIAR SECCION','')";
+  dbquery($atk);
+  return array("access"=>false,"execute"=>"toSSO","msg"=>"not_logged");
+}
+
+function guard_session($param){
+  $apps = $param['apps'];
+  $url = $param['url'];
+  $token = $param['accessToken'];
+  if($token!=""){
+      $qq="call sso.sso_isValidPermissionsByToken ('".$token."', '".$apps."', '".$url."',@p,@r,@m)";
+      $rowqq=array();
+      $error;
+      dbquery_call($qq,"select @r,@m,@p",$rowqq,$error);
+      if(isset($param['debug'])&&$param['debug']) print_r($rowqq);
+        if($rowqq['@r']==2){ // sin permisos
+          $_SESSION['error_profile']=$rowqq['@m'];
+          return array("access"=>false,"execute"=>"toSSO","msg"=>"not_permission");
+        }
+        if($rowqq['@r']==100){ //time_out
+              $_SESSION['error_profile']=$rowqq['@m'];
+              return array("access"=>false,"execute"=>"logoff","msg"=>"time_out");
+        }
+        if($rowqq['@r']==0){ //LOGOFF
+              return array("access"=>false,"execute"=>"logoff","msg"=>"LOGOFF");
+        }
+        return array("access"=>true);
+      }
+      else{
+        return attack_set($param);
+      }
+
+
+
+}
+
+// Empleados
+
 function get_empleados($param) {
   $token = $param['accessToken'];
   if (valid_token($token)){
@@ -256,57 +314,6 @@ function set_empleado($param) {
     }
   }
     return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
-}
-
-function get_profile($param){
-  $app = $param['apps'];
-  $token = $param['accessToken'];
-  if (valid_token($token)){
-    $q_profile="select  distinct(profile) as profi,permissions,nombre from `sso`.`view_profile_token` WHERE  app = '$app' and accessToken = '$token';";
-    $result = dbquery($q_profile);
-    if($result->num_rows>0){
-      $row = mysqli_fetch_assoc($result);
-      $row['fecha']=date("d-M-Y");
-      return array('access'=>true,"ls"=>$row);
-    }
-    return array('access'=> false, 'execute'=>'toSSO',"extras"=>$result);
-  }
-  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
-}
-
-function attack_set($param){
-  $ip = get_ip();
-  $atk="Call sso.sso_attack_add('USUARIO NO AUTENTIFICADO','$ip','".ObtenerNavegador($_SERVER['HTTP_USER_AGENT'])."','SE INTENTO ACCEDER SIN INICIAR SECCION','')";
-  dbquery($atk);
-  return array("access"=>false,"execute"=>"toSSO","msg"=>"not_logged");
-}
-
-function guard_session($param){
-  $apps = $param['apps'];
-  $url = $param['url'];
-  $token = $param['accessToken'];
-  if($token!=""){
-      $qq="call sso.sso_isValidPermissionsByToken ('".$token."', '".$apps."', '".$url."',@p,@r,@m)";
-      $rowqq=array();
-      $error;
-      dbquery_call($qq,"select @r,@m,@p",$rowqq,$error);
-      //print_r($rowqq);
-        if($rowqq['@r']==2){ // sin permisos
-          $_SESSION['error_profile']=$rowqq['@m'];
-          return array("access"=>false,"execute"=>"toSSO","msg"=>"not_permission");
-        }
-        if($rowqq['@r']==100){ //time_out
-              $_SESSION['error_profile']=$rowqq['@m'];
-              return array("access"=>false,"execute"=>"logoff","msg"=>"time_out");
-        }
-        return array("access"=>true);
-      }
-      else{
-        return attack_set($param);
-      }
-
-
-
 }
 
 function get_empresas($param){
@@ -479,6 +486,24 @@ function get_bancos($param){
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
 
+function get_municipios($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    $qget = "select * from `RH`.`view_municipios` where estado_id='$id';";
+    $result = dbquery($qget);
+    $array=array();
+    if ($result->num_rows>0) {
+      while($row = mysqli_fetch_assoc($result)){
+        $row['descripcion'] = utf8_encode($row['descripcion']);
+        $array[]=$row;
+      }
+      return array("access"=>true,"ls"=>$array);
+    }
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
 function get_datos_medicos_empleados($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
@@ -508,25 +533,52 @@ function get_datos_medicos_empleados($param){
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
-
-function get_municipios($param){
+function set_datos_medicos($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
-    $id = $param['index'];
-    $qget = "select * from `RH`.`view_municipios` where estado_id='$id';";
-    $result = dbquery($qget);
-    $array=array();
-    if ($result->num_rows>0) {
-      while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
-        $array[]=$row;
-      }
-      return array("access"=>true,"ls"=>$array);
+    $id = isset($param['id'])?$param['id']:'0';
+    $descripcion=$pagadora['dm_descripcion'];
+    $tipo=$param['dm_tipo'];
+    $id_emp=$param['id_emp'];
+    $id_par=$param['id_par'];
+    $qSDM = "CALL `RH`.`set_datos_medicos`('$descripcion', '$tipo','$id','$id_par','$id_emp',@result)";
+    $flags = "select @result";
+    $array;
+    dbquery_call($result,$flags,$array);
+
+  }
+    return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+// Home
+
+function get_festejos($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $qCumple = "select * from sso.view_fnacimiento where month(fnacimiento)=month(now()) order by dia asc;";
+    $result = dbquery($qCumple);
+    $array = array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array[]=$row;
     }
+    $ls['cumpleaños']=$array;
+    $qCumple = "select * from sso.view_fingreso where month(fingreso)=month(now()) order by dia asc;";
+    $result = dbquery($qCumple);
+    $array = array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array[]=$row;
+    }
+    $ls['aniversario']=$array;
+    $qCumple = "select *from RH.view_cumpleanios_familiar where month(fnacimiento)=month(now()) order by day(fnacimiento) asc;";
+    $result = dbquery($qCumple);
+    $array = array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array[]=$row;
+    }
+    $ls['parientes']=$array;
+    return array('access'=> true, 'ls'=>$ls);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
-
 
 $_sys;
 $_sys= new request();

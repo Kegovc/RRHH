@@ -2,7 +2,7 @@
 <br>
 <div class="row">
     <div class="col-sm-10 offset-sm-1">
-        <h2 class="page-header">Cumpleaños Biologico</h2>
+        <h2 class="page-header">Cumpleaños</h2>
         <table class="table ">
             <thead>
               <tr class="bg-primary"  style="color: white;">
@@ -12,20 +12,58 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="table-primary">
-                <th>1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+              <tr *ngFor="let row of tablas['cumpleaños']" class="{{row.dia==hoy?'table-primary':''}}">
+                <th>{{row.dia}}</th>
+                <td>{{row.empleado}}</td>
+                <td>{{row.edad}}</td>
               </tr>
-              <tr>
-                <th>2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-10 offset-sm-1">
+        <h2 class="page-header">Aniversario en MEGA</h2>
+        <table class="table ">
+            <thead>
+              <tr class="bg-primary"  style="color: white;">
+                <th scope="col">Día</th>
+                <th scope="col">Empleado</th>
+                <th scope="col">Edad</th>
               </tr>
-              <tr>
-                <th>3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of tablas['aniversario']" class="{{row.dia==hoy?'table-primary':''}}" >
+                <th>{{row.dia}}</th>
+                <td>{{row.empleado}}</td>
+                <td>{{row.edad}}</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-10 offset-sm-1">
+        <h2 class="page-header">Cumpleaños Familiares</h2>
+        <table class="table ">
+            <thead>
+              <tr class="bg-primary"  style="color: white;">
+                <th scope="col">Día</th>
+                <th scope="col">Pariente</th>
+                <th scope="col">Empleado</th>
+                <th scope="col">Parentesco</th>
+                <th scope="col">Edad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of tablas['parientes']" class="{{row.dia==hoy?'table-primary':''}}" >
+                <th>{{row.dia}}</th>
+                <td>{{row.pariente}}</td>
+                <td>{{row.empleado}}</td>
+                <td>{{row.descripcion}}</td>
+                <td>{{row.edad}}</td>
               </tr>
             </tbody>
         </table>

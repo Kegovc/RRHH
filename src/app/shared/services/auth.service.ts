@@ -50,7 +50,7 @@ export class AuthService {
         break;
       }
       case 'logoff': {
-        this.clearToken();
+        // this.clearToken();
         // window.location.href = `${environment.sso}close`;
         break;
       }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap';
 import { environment } from '../../../environments/environment';
 import { EmpleadoService } from '../empleado.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -42,6 +41,7 @@ export class DatosMedicosComponent implements OnInit {
   }
   loadDatosMedicos(parient) {
     this.data = {};
+    this.data.dm_tipo = 1;
     this.btnDM = 'Agregar';
     if (environment.debug) { console.log(parient); }
     this.datosMedicos = [];
@@ -69,10 +69,13 @@ export class DatosMedicosComponent implements OnInit {
             this.loadDatosMedicos('0');
             this.load = false;
             this.carga = true;
+            console.log(this.data);
+            this.data.dm_tipo = 1;
           }
         });
     } else {
       this.data = {};
+      this.data.dm_tipo = 1;
       this.btnDM = 'Agregar';
     }
   }
@@ -88,7 +91,13 @@ export class DatosMedicosComponent implements OnInit {
     if (environment.debug) { console.log(this.data); }
   }
   sendDatoMedico() {
+    this.data.id_emp = this.selectedEmpleadoId;
+    this.data.id_par = this.selectedParienteId;
     if (environment.debug) { console.log(this.data); }
+    this.empleadoService.setDatosMedicos(this.data)
+    .then((response: any) => {
+      if (environment.debug) { console.log(response); }
+    });
   }
 
 }

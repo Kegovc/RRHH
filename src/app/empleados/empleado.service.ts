@@ -35,4 +35,13 @@ export class EmpleadoService {
     return this.http.post(`${environment.api}get_datos_medicos_empleados`, data)
     .toPromise();
   }
+  getCumpleaños() {
+    return this.http.post(`${environment.api}get_festejos`, { accessToken: this.authService.getToken()})
+    .toPromise();
+  }
+  setDatosMedicos(data: any) {
+    data.accessToken = this.authService.getToken();
+    return this.http.post(`${environment.api}set_datos_medicos`, data)
+    .toPromise();
+  }
 }
