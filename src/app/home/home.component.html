@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <br>
 <div class="row">
-    <div class="col-sm-10 offset-sm-1">
+    <div class="col-sm-10 offset-sm-1" *ngIf="tablas['cumpleaños'].length>0">
         <h2 class="page-header">Cumpleaños</h2>
         <table class="table ">
             <thead>
@@ -23,7 +23,7 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-sm-10 offset-sm-1">
+    <div class="col-sm-10 offset-sm-1" *ngIf="tablas['aniversario'].length>0">
         <h2 class="page-header">Aniversario en MEGA</h2>
         <table class="table ">
             <thead>
@@ -45,7 +45,7 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-sm-10 offset-sm-1">
+    <div class="col-sm-10 offset-sm-1" *ngIf="tablas['parientes'].length>0">
         <h2 class="page-header">Cumpleaños Familiares</h2>
         <table class="table ">
             <thead>

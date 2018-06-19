@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from './../shared/services/auth.service';
-import { environment } from './../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 // tslint:disable-next-line:import-blacklist
 import 'rxjs';
+import { AuthService } from './../shared/services/auth.service';
+import { environment } from './../../environments/environment';
 
 @Injectable()
 export class EmpleadoService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) { }
   setEmpleado(data: any) {
     data.accessToken = this.authService.getToken();
@@ -43,5 +45,23 @@ export class EmpleadoService {
     data.accessToken = this.authService.getToken();
     return this.http.post(`${environment.api}set_datos_medicos`, data)
     .toPromise();
+  }
+  delDatosMedicos(data: any) {
+    data.accessToken = this.authService.getToken();
+    return this.http.post(`${environment.api}del_datos_medicos`, data)
+    .toPromise();
+  }
+  getFamilia(data: any) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}get_familia`, data)
+    .toPromise();
+  }
+  setFamilia(data: any) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}set_familia`, data)
+    .toPromise();
+  }
+  alerteFaltaDatos(mensaje) {
+    this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
   }
 }

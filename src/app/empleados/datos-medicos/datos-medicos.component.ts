@@ -12,7 +12,7 @@ export class DatosMedicosComponent implements OnInit {
   public load = false;
   public data: any = {};
   public btnDM = 'Agregar';
-  public empleados: any[];
+  public empleados: any[] = [];
   public selectedEmpleadoId: number;
   // tslint:disable-next-line:no-inferrable-types
   public selectedParienteId: string = '0';
@@ -63,13 +63,11 @@ export class DatosMedicosComponent implements OnInit {
         .then((response: any) => {
           if (environment.debug) { console.log(response); }
           if (response.fun.access) {
-            console.log(response.fun.ls);
             this.datosMedicosAll = response.fun.ls.dm;
             this.parentesco   = response.fun.ls.fm;
             this.loadDatosMedicos('0');
             this.load = false;
             this.carga = true;
-            console.log(this.data);
             this.data.dm_tipo = 1;
           }
         });
@@ -90,14 +88,42 @@ export class DatosMedicosComponent implements OnInit {
     });
     if (environment.debug) { console.log(this.data); }
   }
-  sendDatoMedico() {
-    this.data.id_emp = this.selectedEmpleadoId;
-    this.data.id_par = this.selectedParienteId;
-    if (environment.debug) { console.log(this.data); }
-    this.empleadoService.setDatosMedicos(this.data)
+  eliminar(id) {
+    this.empleadoService.delDatosMedicos({id: id})
     .then((response: any) => {
       if (environment.debug) { console.log(response); }
+      if (response.fun.access) { this.refrescar( this.selectedParienteId); }
     });
+    if (environment.debug) { console.log(this.data); }
   }
-
+  sendDatoMedico() {
+    if (this.data.dm_descripcion !== '' && typeof this.data.dm_descripcion !== 'undefined') {
+      this.data.id_emp = this.selectedEmpleadoId;
+      this.data.id_par = this.selectedParienteId;
+      if (environment.debug) { console.log(this.data); }
+      this.empleadoService.setDatosMedicos(this.data)
+      .then((response: any) => {
+        if (environment.debug) { console.log(response); }
+        this.refrescar(this.data.id_par);
+      });
+    } else {
+      this.empleadoService.alerteFaltaDatos('');
+    }
+  }
+  refrescar(id_par_) {
+    this.load = true;
+      this.empleadoService.getDataMedicoEmpleado({index: this.selectedEmpleadoId})
+      .then((response: any) => {
+        if (environment.debug) { console.log(response); }
+        if (response.fun.access) {
+          this.datosMedicosAll = response.fun.ls.dm;
+          this.parentesco   = response.fun.ls.fm;
+          this.selectedParienteId = id_par_;
+          this.loadDatosMedicos(id_par_);
+          this.load = false;
+          this.carga = true;
+          this.data.dm_tipo = 1;
+        }
+      });
+  }
 }

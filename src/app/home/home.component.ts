@@ -9,7 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   public title = 'RRHH';
-  public tablas: any[] = [];
+  public tablas: any = {
+    cumpleaños: [],
+    aniversario: [],
+    parientes: []
+
+  };
   public hoy;
 
   constructor(

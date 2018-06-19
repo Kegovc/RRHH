@@ -99,7 +99,7 @@ function ObtenerNavegador($user_agent) {
 function set_header(){
   if (isset($_SERVER['HTTP_ORIGIN'])) {
       header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-      header('Content-Type: text/html; charset=UTF-8');
+      header('Content-Type: application/json; charset=UTF-8');
       //If required
       header('Access-Control-Allow-Credentials: true');
       header('Access-Control-Max-Age: 86400');    // cache for 1 day
@@ -508,26 +508,22 @@ function get_datos_medicos_empleados($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
     $id = $param['index'];
-    $qDM = "select * FROM rh.view_datos_medicos where id_emp = '$id' ;";
+    $qDM = "select * FROM RH.view_datos_medicos where id_emp = '$id' ;";
     $result = dbquery($qDM);
     $array=array();
     while($row = mysqli_fetch_assoc($result)){
-      foreach($row as $key => $value){
-        $row[$key] = utf8_decode($value);
-      }
       $array[] = $row;
     }
     $datos_medicos=$array;
-    $qDM = "select * FROM rh.view_parentesco where id_empleado = '$id' ;";
+    //print_r($array);
+    $qDM = "select * FROM RH.view_parentesco where id_empleado = '$id' ;";
     $result = dbquery($qDM);
     $array=array();
     while($row = mysqli_fetch_assoc($result)){
-      foreach($row as $key => $value){
-        $row[$key] = utf8_decode($value);
-      }
       $array[] = $row;
     }
     $parentescos=$array;
+    //print_r($array);
 
     return array('access'=> true, 'ls'=>array("dm"=>$datos_medicos, "fm"=>$parentescos));
   }
@@ -537,17 +533,81 @@ function set_datos_medicos($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
     $id = isset($param['id'])?$param['id']:'0';
-    $descripcion=$pagadora['dm_descripcion'];
+    $dm_descripcion=strtoupper($param['dm_descripcion']);
     $tipo=$param['dm_tipo'];
     $id_emp=$param['id_emp'];
     $id_par=$param['id_par'];
-    $qSDM = "CALL `RH`.`set_datos_medicos`('$descripcion', '$tipo','$id','$id_par','$id_emp',@result)";
+    $qSDM = "CALL `RH`.`set_datos_medicos`('$dm_descripcion', '$tipo','$id','$id_par','$id_emp',@result)";
     $flags = "select @result";
     $array;
-    dbquery_call($result,$flags,$array);
-
+    dbquery_call($qSDM,$flags,$array);
+    return array('access'=> true, 'ls'=>$array);
   }
     return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function del_datos_medicos($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['id'];
+    $q_Del = "call `RH`.`del_datos_medicos`($id);";
+    dbquery($q_Del);
+    return array('access'=> true);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+
+}
+
+function get_familia($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    $qDM = "select * FROM RH.view_parentesco where id_empleado = '$id' ;";
+    $result = dbquery($qDM);
+    $array=array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array[] = $row;
+    }
+
+    $qget = "select * FROM RH.view_sangre;";
+    $result = dbquery($qget);
+    $array_s=array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array_s[] = $row;
+    }
+
+    $qget = "select * FROM RH.view_catalogo_parentescos;";
+    $result = dbquery($qget);
+    $array_p=array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array_p[] = $row;
+    }
+
+    return array('access'=> true, "ls" => $array, "pareintes" => $array_p, "sangre" => $array_s );
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function set_familia($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = isset($param['id'])?$param['id']:'0';
+    $fnacimiento = $param['fnacimiento'];
+    $id_empleado = $param['id_empleado'];
+    $materno = $param['materno'];
+    $nombre = $param['nombre'];
+    $paterno = $param['paterno'];
+    $tipo = $param['tipo_id'];
+    $tsangre = $param['tsangre_id'];
+    $q_FAM = "CALL `RH`.`set_familia`('$id','$token','$id_empleado','$tipo','$paterno','$materno','$nombre','$fnacimiento','$tsangre')";
+    $error='';
+    dbquery($q_FAM, $error);
+    if($error== ''){
+      return array('access'=> true);
+    }
+    return array('access'=> false, 'execute'=>'toSSO',"msg"=>$error);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
 // Home
 
