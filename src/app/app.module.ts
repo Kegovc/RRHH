@@ -1,3 +1,4 @@
+import { CatalogoService } from './catalogos/catalogo.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -68,6 +69,7 @@ import { CatalogosComponent } from './catalogos/catalogos.component';
     AuthService,
     SessionGuard,
     EmpleadoService,
+    CatalogoService,
   ],
   bootstrap: [AppComponent]
 })

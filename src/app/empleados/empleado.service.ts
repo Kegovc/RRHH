@@ -61,6 +61,11 @@ export class EmpleadoService {
     return this.http.post(`${environment.api}set_familia`, data)
     .toPromise();
   }
+  getMovimientos(data: any) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}get_movimientos`, data)
+    .toPromise();
+  }
   alerteFaltaDatos(mensaje) {
     this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
   }

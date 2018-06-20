@@ -223,7 +223,7 @@ function get_empleado($param) {
       $array=array();
       if ($result->num_rows>0) {
         while($row = mysqli_fetch_assoc($result)){
-          $row['descripcion'] = utf8_encode($row['descripcion']);
+         $row['descripcion'] = utf8_encode($row['descripcion']);
           $array[]=$row;
         }
       }
@@ -236,7 +236,7 @@ function get_empleado($param) {
       $array=array();
       if ($result->num_rows>0) {
         while($row = mysqli_fetch_assoc($result)){
-          $row['descripcion'] = utf8_encode($row['descripcion']);
+         $row['descripcion'] = utf8_encode($row['descripcion']);
           $array[]=$row;
         }
       }
@@ -297,12 +297,11 @@ function set_empleado($param) {
     $emergencias_casa =strtoupper( $param['emergencias_casa']);
     $banco =strtoupper( $param['banco']);
     $clabe =strtoupper( $param['clabe']);
-    $salario_mensual =strtoupper( $param['salario_mensual']);
     $dia_pago =strtoupper( $param['dia_pago']);
     $casa_propia =strtoupper( $param['casa_propia']);
     $medio_transporte =strtoupper( $param['medio_transporte']);
     $id = (isset($param['id']))?$param['id']:0;
-    $qEmp = "call `sso`.`sso_setEmpleado`('$cia', 	'$nivel', 	'$numero_emp', 	'$status_rh', 	'$pagadora', 	'$razon_social', 	'$nombre', 	'$segundo_nombre', 	'$paterno', 	'$materno', 	'$fingreso', 	'$puesto', 	'$division', 	'$departamento', 	'$lugar_prestacion', 	'$horario', 	'$genero', 	'$fnacimiento', 	'$nacionalidad', 	'$estado_nacimiento', 	'$ciudad_nacimiento', 	'$numero_ss', 	'$numero_infonavit', 	'$rfc', 	'$curp', 	'$tsangre', 	'$nivel_estudios', 	'$carrera', 	'$titulo', 	'$direccion', 	'$cruces', 	'$colonia', 	'$estado', 	'$municipio', 	'$cp', 	'$personal_email', 	'$tcasa', 	'$cell', 	'$estado_civil', 	'$emergencias_nombre', 	'$emergencias_parentesco', 	'$emergencias_cel', 	'$emergencias_oficina', 	'$emergencias_casa', 	'$banco', 	'$clabe', 	'$salario_mensual', 	'$dia_pago', 	'$casa_propia', 	'$medio_transporte', 	'$id', @result)";
+    $qEmp = "call `sso`.`sso_setEmpleado`('$cia', 	'$nivel', 	'$numero_emp', 	'$status_rh', 	'$pagadora', 	'$razon_social', 	'$nombre', 	'$segundo_nombre', 	'$paterno', 	'$materno', 	'$fingreso', 	'$puesto', 	'$division', 	'$departamento', 	'$lugar_prestacion', 	'$horario', 	'$genero', 	'$fnacimiento', 	'$nacionalidad', 	'$estado_nacimiento', 	'$ciudad_nacimiento', 	'$numero_ss', 	'$numero_infonavit', 	'$rfc', 	'$curp', 	'$tsangre', 	'$nivel_estudios', 	'$carrera', 	'$titulo', 	'$direccion', 	'$cruces', 	'$colonia', 	'$estado', 	'$municipio', 	'$cp', 	'$personal_email', 	'$tcasa', 	'$cell', 	'$estado_civil', 	'$emergencias_nombre', 	'$emergencias_parentesco', 	'$emergencias_cel', 	'$emergencias_oficina', 	'$emergencias_casa', 	'$banco', 	'$clabe', 	'$dia_pago', 	'$casa_propia', 	'$medio_transporte', 	'$id', @result)";
     $flags = "select @result";
     $array = array();
     $error = "";
@@ -324,7 +323,7 @@ function get_empresas($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -341,7 +340,7 @@ function get_puestos($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -358,7 +357,7 @@ function get_division($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -375,7 +374,7 @@ function get_lugar($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -392,7 +391,7 @@ function get_horarios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -409,7 +408,7 @@ function get_estados($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -426,7 +425,7 @@ function get_sangre($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -443,7 +442,7 @@ function get_estudios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -460,7 +459,7 @@ function get_civil($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -495,7 +494,7 @@ function get_municipios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+       $row['descripcion'] = utf8_encode($row['descripcion']);
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -609,6 +608,50 @@ function set_familia($param) {
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
+
+function get_movimientos($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    $qDM = "select * FROM RH.view_movimiento_salarial where id_emp = '$id' ;";
+    $result = dbquery($qDM);
+    $array=array();
+    while($row = mysqli_fetch_assoc($result)){
+      $row['incremento']=number_format($row['incremento'],2);
+      $array[] = $row;
+    }
+
+    $qget = "select * FROM RH.view_tipo_movimiento;";
+    $result = dbquery($qget);
+    $array_p=array();
+    while($row = mysqli_fetch_assoc($result)){
+      $array_p[] = $row;
+    }
+
+    return array('access'=> true, "ls" => $array, "tipos" => $array_p);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+// Catalogo
+
+
+function get_catalogos($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $qget = "select * from `RH`.`view_catalogos`;";
+    $result = dbquery($qget);
+    $array=array();
+    if ($result->num_rows>0) {
+      while($row = mysqli_fetch_assoc($result)){
+       $row['descripcion'] = utf8_encode($row['descripcion']);
+        $array[]=$row;
+      }
+      return array("access"=>true,"ls"=>$array);
+    }
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
 // Home
 
 function get_festejos($param){

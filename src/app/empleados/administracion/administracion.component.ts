@@ -65,7 +65,6 @@ export class AdministracionComponent implements OnInit {
     emergencias_casa:  '',
     banco:  '',
     clabe:  '',
-    salario_mensual:  '',
     dia_pago:  '',
     casa_propia:  '',
     medio_transporte:  ''
@@ -122,7 +121,6 @@ export class AdministracionComponent implements OnInit {
     {label: 'TELEFONO DE EMERGENCIA DE CASA', name: 'emergencias_casa', type: 'text', values: '', on: '', disable: false},
     {label: 'BANCO', name: 'banco', type: 'id->', values: 'get_bancos', on: '', disable: true},
     {label: 'CLABE INTERBANCARIA', name: 'clabe', type: 'num', values: '', on: '', disable: false},
-    {label: 'SUELDO BASE MENSUAL', name: 'salario_mensual', type: 'num', values: '', on: '', disable: false},
     {label: 'DIA DE PAGO', name: 'dia_pago', type: 'num', values: '', on: '', disable: false},
     {label: 'CASA PROPIA', name: 'casa_propia', type: 'id->', values: '["SI","NO"]', on: '', disable: true},
     // tslint:disable-next-line:max-line-length
