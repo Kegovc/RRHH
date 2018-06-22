@@ -18,6 +18,21 @@ export class MovimientoSalarialComponent implements OnInit {
 
   public movimientos: any[] = [];
   public tipos: any[] = [];
+  public mes: any[] = [
+    {id: 1, descripcion: 'Enero'},
+    {id: 2, descripcion: 'Febrero'},
+    {id: 3, descripcion: 'Marzo'},
+    {id: 4, descripcion: 'Abril'},
+    {id: 5, descripcion: 'Mayo'},
+    {id: 6, descripcion: 'Junio'},
+    {id: 1, descripcion: 'Julio'},
+    {id: 2, descripcion: 'Agosto'},
+    {id: 3, descripcion: 'Septiembre'},
+    {id: 4, descripcion: 'Octubre'},
+    {id: 5, descripcion: 'Noviembre'},
+    {id: 6, descripcion: 'Diciembre'}
+  ];
+  public anio: any[] = [];
   modalRef: BsModalRef;
 
   loadEmpleado(empleado, _carga = false) {
@@ -50,6 +65,15 @@ export class MovimientoSalarialComponent implements OnInit {
     private authService: AuthService,
     private modalService: BsModalService
   ) {
+    const now = new Date();
+    let index = 0;
+    for (let i = 2000; i <= now.getFullYear() ; i++, index ++) {
+      this.anio[index] = {id: (index + 1), descripcion: `${i}`};
+    }
+    this.data.mes_id = now.getMonth() + 1;
+    this.data.anio_id = index;
+    this.data.tipo_id = 1;
+    this.data.incremento = 0;
     this.selectedEmpleadoId = 0;
     this.empleadoService.getEmpleados()
     .then((response: any) => {
@@ -64,9 +88,24 @@ export class MovimientoSalarialComponent implements OnInit {
       }
     });
    }
-
+   aceptar() {
+     if (environment.debug) { console.log(this.data); }
+     this.data.id_emp = this.selectedEmpleadoId;
+     this.data.mes = this.mes.find((dato: any) => dato.id === this.data.mes_id).descripcion;
+     this.data.anio = this.anio.find((dato: any) => dato.id === this.data.anio_id).descripcion;
+     this.empleadoService.setMovimiento(this.data)
+     .then((response: any) => {
+       if (environment.debug) { console.log(response); }
+       if (response.fun.access) {
+        this.loadEmpleado(this.selectedEmpleadoId, true);
+       }
+     });
+   }
    openModal(template: TemplateRef<any>) {
-     this.modalRef = this.modalService.show(template);
+     this.modalRef = this.modalService.show(template, { ignoreBackdropClick: true});
+   }
+   closeModal() {
+    this.modalRef.hide();
    }
   ngOnInit() {
   }

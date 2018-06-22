@@ -632,6 +632,16 @@ function get_movimientos($param) {
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
+
+function set_movimiento($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    ksort($param);
+    print_r($param);
+    return array('access'=> true, "ls" => "");
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
 // Catalogo
 
 

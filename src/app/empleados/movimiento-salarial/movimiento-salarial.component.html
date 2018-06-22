@@ -71,27 +71,28 @@
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-4 col-form-label">MES</label>
                 <div class="col-sm-8">
-                  <select class="form-control" [(ngModel)]="data.tipo_id" name="tipo_id" >
-                      <option *ngFor="let dato of tipos" value="{{dato.id}}">{{dato.descripcion}}</option>
+                  <select class="form-control" [(ngModel)]="data.mes_id" name="mes_id" >
+                      <option *ngFor="let dato of mes" value="{{dato.id}}">{{dato.descripcion}}</option>
                   </select>
               </div>
             </div>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-4 col-form-label">AÑO</label>
                 <div class="col-sm-8">
-                  <select class="form-control" [(ngModel)]="data.tipo_id" name="tipo_id" >
-                      <option *ngFor="let dato of tipos" value="{{dato.id}}">{{dato.descripcion}}</option>
+                  <select class="form-control" [(ngModel)]="data.anio_id" name="anio_id" >
+                      <option *ngFor="let dato of anio" value="{{dato.id}}">{{dato.descripcion}}</option>
                   </select>
               </div>
             </div>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-4 col-form-label">INCREMENTO</label>
                 <div class="col-sm-8">
-                  <input type="number" class="form-control" id="inputEmail3" placeholder="Email" MyNumberOnly>
+                  <input type="number" class="form-control" [(ngModel)]="data.incremento" id="incremento" MyNumberOnly>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-default" type="button">Close</button>
+            <button class="btn btn-default" type="button" (click)="closeModal()">Close</button>
+            <button class="btn btn-primary" type="button" (click)="aceptar()">Aceptar</button>
           </div>
       </ng-template>
