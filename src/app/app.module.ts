@@ -27,6 +27,7 @@ import { FamiliaComponent } from './empleados/familia/familia.component';
 import { EmpleadoService } from './empleados/empleado.service';
 import { MovimientoSalarialComponent } from './empleados/movimiento-salarial/movimiento-salarial.component';
 import { CatalogosComponent } from './catalogos/catalogos.component';
+import { ExpedientesComponent } from './empleados/expedientes/expedientes.component';
 
 
 
@@ -48,6 +49,7 @@ import { CatalogosComponent } from './catalogos/catalogos.component';
     FamiliaComponent,
     MovimientoSalarialComponent,
     CatalogosComponent,
+    ExpedientesComponent,
   ],
   imports: [
     BrowserModule,

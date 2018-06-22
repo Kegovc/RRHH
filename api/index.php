@@ -223,7 +223,9 @@ function get_empleado($param) {
       $array=array();
       if ($result->num_rows>0) {
         while($row = mysqli_fetch_assoc($result)){
-         $row['descripcion'] = utf8_encode($row['descripcion']);
+          if(json_encode(array($row['descripcion']))==''){
+            $row['descripcion'] = utf8_encode($row['descripcion']);
+          }
           $array[]=$row;
         }
       }
@@ -236,7 +238,9 @@ function get_empleado($param) {
       $array=array();
       if ($result->num_rows>0) {
         while($row = mysqli_fetch_assoc($result)){
-         $row['descripcion'] = utf8_encode($row['descripcion']);
+          if(json_encode(array($row['descripcion']))==''){
+            $row['descripcion'] = utf8_encode($row['descripcion']);
+          }
           $array[]=$row;
         }
       }
@@ -323,7 +327,9 @@ function get_empresas($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -340,7 +346,9 @@ function get_puestos($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -357,7 +365,9 @@ function get_division($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -374,7 +384,9 @@ function get_lugar($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -391,7 +403,9 @@ function get_horarios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -408,7 +422,9 @@ function get_estados($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -425,7 +441,9 @@ function get_sangre($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -442,7 +460,9 @@ function get_estudios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -459,7 +479,9 @@ function get_civil($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+       if(json_encode(array($row['descripcion']))==''){
+         $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -476,7 +498,9 @@ function get_bancos($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-        $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -494,7 +518,9 @@ function get_municipios($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);
@@ -528,6 +554,7 @@ function get_datos_medicos_empleados($param){
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
+
 function set_datos_medicos($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
@@ -636,9 +663,84 @@ function get_movimientos($param) {
 function set_movimiento($param) {
   $token = $param['accessToken'];
   if (valid_token($token)){
-    ksort($param);
-    print_r($param);
-    return array('access'=> true, "ls" => "");
+    $anio = $param['anio'];
+    $id_emp = $param['id_emp'];
+    $incremento = $param['incremento'];
+    $mes = $param['mes'];
+    $tipo = $param['tipo_id'];
+    $array = array();
+    $q_MS = "call `RH`.`set_movimiento_salarial`( '$id_emp', '$tipo', '$mes', '$anio', '$incremento' , @msn);";
+    dbquery_call($q_MS,'select @msn', $array);
+    return array('access'=> true, "ls" => $array);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function get_expediente($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    $qExp = "select * FROM `sso`.`view_data_empleado` where id = '$id' ;";
+    $result = dbquery($qExp);
+    $array=array();
+    $array = mysqli_fetch_assoc($result);
+    if($array['documentos_personales']==''){
+      $array['documentos_personales']="000000000000000";
+    }
+
+    if($array['documentos_internos']==''){
+      $array['documentos_internos']="0000000000000000";
+    }
+
+
+    foreach($array as $key => $value){
+      if(json_encode(array($value))==''){
+        $array[$key] = utf8_encode($value);
+      }
+    }
+
+
+    $temp = $array['documentos_personales'];
+    $array['documentos_personales'] = array();
+    for($i=0;$i<strlen($temp);$i++){
+      $array['documentos_personales'][$i]=!!$temp[$i];
+    }
+    $temp = $array['documentos_internos'];
+    $array['documentos_internos'] = array();
+    for($i=0;$i<strlen($temp);$i++){
+      $array['documentos_internos'][$i]=!!$temp[$i];
+    }
+
+    return array('access'=> true, "ls" => $array);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function set_expediente($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['index'];
+    foreach($param['documentos_internos'] as $key => $value){
+      if($value==""){
+        $param['documentos_internos'][$key] = "0";
+      }
+    }
+    foreach($param['documentos_personales'] as $key => $value){
+      if($value==""){
+        $param['documentos_personales'][$key] = "0";
+      }
+    }
+    $param['documentos_internos'] = implode('', $param['documentos_internos']);
+    $param['documentos_personales'] = implode('', $param['documentos_personales']);
+    $documentos_internos = $param['documentos_internos'];
+    $documentos_personales = $param['documentos_personales'];
+
+    $qExp = "call `RH`.`set_expediente`('$id', '$documentos_internos', '$documentos_personales', @msn)";
+    $array=array();
+
+    dbquery_call($qExp,'select @msn',$array);
+
+    return array('access'=> true, "ls" => $array);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
@@ -653,7 +755,9 @@ function get_catalogos($param){
     $array=array();
     if ($result->num_rows>0) {
       while($row = mysqli_fetch_assoc($result)){
-       $row['descripcion'] = utf8_encode($row['descripcion']);
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
         $array[]=$row;
       }
       return array("access"=>true,"ls"=>$array);

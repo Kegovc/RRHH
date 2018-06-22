@@ -7,14 +7,16 @@ import { AdministracionComponent } from './empleados/administracion/administraci
 import { FamiliaComponent } from './empleados/familia/familia.component';
 import { DatosMedicosComponent } from './empleados/datos-medicos/datos-medicos.component';
 import { MovimientoSalarialComponent } from './empleados/movimiento-salarial/movimiento-salarial.component';
+import { ExpedientesComponent } from './empleados/expedientes/expedientes.component';
 
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent, canActivate: [SessionGuard]},
+  {path: 'Empleados/Movimiento_Salarial', component: MovimientoSalarialComponent, canActivate: [SessionGuard]},
   {path: 'Empleados/Administracion', component: AdministracionComponent, canActivate: [SessionGuard]},
   {path: 'Empleados/Datos-Medicos', component: DatosMedicosComponent, canActivate: [SessionGuard]},
+  {path: 'Empleados/Expediente', component: ExpedientesComponent, canActivate: [SessionGuard]},
   {path: 'Empleados/Familia', component: FamiliaComponent, canActivate: [SessionGuard]},
-  {path: 'Empleados/Movimiento_Salarial', component: MovimientoSalarialComponent, canActivate: [SessionGuard]},
   {path: 'Catalogos', component: CatalogosComponent, canActivate: [SessionGuard]},
   {path: 'logoff', component: LogoffComponent},
   {path: '**', component: HomeComponent, canActivate: [SessionGuard]}

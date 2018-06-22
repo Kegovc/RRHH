@@ -71,6 +71,18 @@ export class EmpleadoService {
     return this.http.post(`${environment.api}set_movimiento`, data)
     .toPromise();
   }
+
+  getExpediente(data: any) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}get_expediente`, data)
+    .toPromise();
+  }
+  setExpediente(data: any) {
+    data.accessToken = this.authService.getToken();
+    return this.http.post(`${environment.api}set_expediente`, data)
+    .toPromise();
+  }
+
   alerteFaltaDatos(mensaje) {
     this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
   }

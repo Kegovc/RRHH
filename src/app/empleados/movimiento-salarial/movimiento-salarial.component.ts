@@ -81,8 +81,6 @@ export class MovimientoSalarialComponent implements OnInit {
       if (response.fun.access) {
         this.empleados = response.fun.ls;
         if (environment.debug) { console.log(this.empleados); }
-        this.loadEmpleado(12); // esta
-        this.selectedEmpleadoId = 12; // esta
       } else {
         this.authService.executeAccess(response.fun.execute);
       }
@@ -98,6 +96,7 @@ export class MovimientoSalarialComponent implements OnInit {
        if (environment.debug) { console.log(response); }
        if (response.fun.access) {
         this.loadEmpleado(this.selectedEmpleadoId, true);
+        this.closeModal();
        }
      });
    }
