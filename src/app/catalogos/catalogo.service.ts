@@ -16,12 +16,21 @@ export class CatalogoService {
     private toastr: ToastrService
   ) { }
 
-  getCatalogo() {
+  getCatalogos() {
     const data: any = {};
     data.accessToken =  this.authService.getToken();
     return this.http.post(`${environment.api}get_catalogos`, data)
     .toPromise();
   }
+
+  getCatalogo(id) {
+    const data: any = {};
+    data.accessToken =  this.authService.getToken();
+    data.id = id;
+    return this.http.post(`${environment.api}get_catalogo`, data)
+    .toPromise();
+  }
+
   alerteFaltaDatos(mensaje) {
     this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
   }

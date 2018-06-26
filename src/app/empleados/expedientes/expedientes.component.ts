@@ -11,6 +11,63 @@ import { environment } from './../../../environments/environment';
 export class ExpedientesComponent implements OnInit {
   public load = false;
   public data: any = {};
+  typeData: any = {
+    nombre: '',
+    segundo_nombre: '',
+    paterno: '',
+    materno: '',
+    fingreso: '',
+    puesto: '',
+    division: '',
+    fnacimiento: '',
+    numero_ss: '',
+    rfc: '',
+    curp: '',
+    documentos_personales: [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    documentos_internos: [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  };
   public empleados: any[] = [];
   public selectedEmpleadoId: number;
   public carga =  false;
@@ -26,6 +83,9 @@ export class ExpedientesComponent implements OnInit {
       if (response.fun.access) {
         this.empleados = response.fun.ls;
         if (environment.debug) { console.log(this.empleados); }
+        this.selectedEmpleadoId = 0;
+        this.selectedEmpleadoId = 12;
+        this.loadEmpleado(12);
       } else {
         this.authService.executeAccess(response.fun.execute);
       }
@@ -34,7 +94,7 @@ export class ExpedientesComponent implements OnInit {
 
   loadEmpleado(empleado, _carga = false) {
     if (environment.debug) { console.log(empleado); }
-    this.data = {};
+    this.data = this.typeData;
     this.carga = _carga;
     if (empleado > 0) {
       this.load = true;
@@ -43,13 +103,12 @@ export class ExpedientesComponent implements OnInit {
           if (environment.debug) { console.log(response); }
           if (response.fun.access) {
             this.data = response.fun.ls;
-            console.log(this.data);
             this.load = false;
             this.carga = true;
           }
         });
     } else {
-      this.data = {};
+      this.data = this.typeData;
     }
   }
   guardar() {

@@ -4,9 +4,9 @@
     <div class="form-group row">
         <label for="inputPassword" class="col-sm-3 col-form-label">Empleados</label>
         <div class="col-sm-7">
-          <select class="form-control" id=""  [(ngModel)]="selectedCatalogoId" (change)="loadCatalogo(selectedCatalogoId)" [doDisbled]="empleados.length===0" >
+          <select class="form-control" id=""  [(ngModel)]="selectedCatalogoId" (change)="loadCatalogo(selectedCatalogoId)" [doDisbled]="catalogos.length===0" >
               <option selected="true" value="0">Refrescar</option>
-              <option *ngFor="let empleado of empleados; let i = index" value="{{empleado.id}}">{{empleado.descripcion}}</option>
+              <option *ngFor="let empleado of catalogos; let i = index" value="{{empleado.id}}">{{empleado.descripcion}}</option>
             </select>
         </div>
       </div>
@@ -20,5 +20,6 @@
 </div>
 <div class="row" *ngIf="carga">
   <div class="col-sm-8 offset-sm-2">
+      <button *ngFor="let dato of catalogo" type="button" class="btn btn-primary" style="margin: 0 10px 10px 0;">{{dato.descripcion}}</button>
   </div>
 </div>

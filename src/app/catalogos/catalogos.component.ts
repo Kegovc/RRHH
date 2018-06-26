@@ -11,7 +11,8 @@ import { environment } from '../../environments/environment';
 export class CatalogosComponent implements OnInit {
   public load = false;
   public data: any = {};
-  public empleados: any[] = [];
+  public catalogos: any[] = [];
+  public catalogo: any[] = [];
   public selectedCatalogoId: number;
   public carga =  false;
 
@@ -20,20 +21,34 @@ export class CatalogosComponent implements OnInit {
     private authService: AuthService
   ) {
     this.selectedCatalogoId = 0;
-    this.catalogoService.getCatalogo()
+    this.catalogoService.getCatalogos()
     .then((response: any) => {
       if (environment.debug) { console.log(response); }
       if (response.fun.access) {
-        this.empleados = response.fun.ls;
-        if (environment.debug) { console.log(this.empleados); }
+        this.catalogos = response.fun.ls;
+        if (environment.debug) { console.log(this.catalogos); }
       } else {
         this.authService.executeAccess(response.fun.execute);
       }
     });
    }
 
-  loadCatalogo(id) {
+  loadCatalogo(id, carga = false) {
     console.log(id);
+    this.load = true;
+    this.carga = carga;
+    this.catalogoService.getCatalogo(id)
+    .then((response: any) => {
+      if (environment.debug) { console.log(response); }
+      if (response.fun.access) {
+        this.catalogo = response.fun.ls;
+        this.load = false;
+        this.carga = true;
+        if (environment.debug) { console.log(this.catalogo); }
+      } else {
+        this.authService.executeAccess(response.fun.execute);
+      }
+    });
    }
   ngOnInit() {
   }

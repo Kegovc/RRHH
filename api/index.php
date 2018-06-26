@@ -685,11 +685,11 @@ function get_expediente($param) {
     $array=array();
     $array = mysqli_fetch_assoc($result);
     if($array['documentos_personales']==''){
-      $array['documentos_personales']="000000000000000";
+      $array['documentos_personales']="00000000000000000000";
     }
 
     if($array['documentos_internos']==''){
-      $array['documentos_internos']="0000000000000000";
+      $array['documentos_internos']="00000000000000000000";
     }
 
 
@@ -760,6 +760,31 @@ function get_catalogos($param){
         }
         $array[]=$row;
       }
+      return array("access"=>true,"ls"=>$array);
+    }
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function get_catalogo($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['id'];
+    $qget = "call `RH`.`get_catalogo_view`('$id',@view);";
+    $flag = "select @view;";
+    $array = array();
+    dbquery_call($qget,$flag,$array);
+    $qget = "select * from ".$array['@view'];
+    $result = dbquery($qget);
+    $array=array();
+    if ($result->num_rows>0) {
+      while($row = mysqli_fetch_assoc($result)){
+        if(json_encode(array($row['descripcion']))==''){
+          $row['descripcion'] = utf8_encode($row['descripcion']);
+        }
+        $array[]=$row;
+      }
+
       return array("access"=>true,"ls"=>$array);
     }
   }
