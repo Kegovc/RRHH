@@ -29,9 +29,13 @@ export class ReporteService {
   }
 
   execute(data) {
+    if (environment.debug) { console.log(data); }
     switch (data.execute) {
       case 'download': {
-
+        const b = document.createElement('a');
+        b.setAttribute('href', `${environment.api}${data.verb}?argument=${data.argument}&accessToken=${this.authService.getToken()}`);
+        b.setAttribute('target', '_blank');
+        b.click();
         break;
       }
     }

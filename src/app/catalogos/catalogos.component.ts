@@ -36,8 +36,6 @@ export class CatalogosComponent implements OnInit {
       if (environment.debug) { console.log(response); }
       if (response.fun.access) {
         this.catalogos = response.fun.ls;
-        this.selectedCatalogoId = 11;
-        this.loadCatalogo(11);
         if (environment.debug) { console.log(this.catalogos); }
       } else {
         this.authService.executeAccess(response.fun.execute);

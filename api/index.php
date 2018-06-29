@@ -40,6 +40,11 @@ class request{
             foreach( $data as $clave => $valor){
               $param[$clave] = $valor;
             }
+            $get_param = $_GET;
+            unset($get_param['url']);
+            foreach( $get_param as $clave => $valor){
+              $param[$clave] = $valor;
+            }
             $this->param=$param;
 
         }
@@ -215,6 +220,11 @@ function get_empleado($param) {
     $result = dbquery("select * from `sso`.`view_get_empleado` where id='$id'");
     $empleados;
     while($row = mysqli_fetch_assoc($result)){
+      foreach($row as $key => $value){
+        if(json_encode(array($value))==''){
+          $row[$key] = utf8_encode($value);
+        }
+      }
       $empleados = $row;
     }
     $extras;
@@ -257,55 +267,55 @@ function get_empleado($param) {
 function set_empleado($param) {
   $token = $param['accessToken'];
   if (valid_token($token)){
-    $cia =strtoupper( $param['cia']);
-    $nivel =strtoupper( $param['nivel']);
-    $numero_emp =strtoupper( $param['numero_emp']);
-    $status_rh =strtoupper( $param['status_rh']);
-    $pagadora =strtoupper( $param['pagadora']);
-    $razon_social =strtoupper( $param['razon_social']);
-    $nombre =strtoupper( $param['nombre']);
-    $segundo_nombre =strtoupper( $param['segundo_nombre']);
-    $paterno =strtoupper( $param['paterno']);
-    $materno =strtoupper( $param['materno']);
-    $fingreso =strtoupper( $param['fingreso']);
-    $puesto =strtoupper( $param['puesto']);
-    $division =strtoupper( $param['division']);
-    $departamento =strtoupper( $param['departamento']);
-    $lugar_prestacion =strtoupper( $param['lugar_prestacion']);
-    $horario =strtoupper( $param['horario']);
-    $genero =strtoupper( $param['genero']);
-    $fnacimiento =strtoupper( $param['fnacimiento']);
-    $nacionalidad =strtoupper( $param['nacionalidad']);
-    $estado_nacimiento =strtoupper( $param['estado_nacimiento']);
-    $ciudad_nacimiento =strtoupper( $param['ciudad_nacimiento']);
-    $numero_ss =strtoupper( $param['numero_ss']);
-    $numero_infonavit =strtoupper( $param['numero_infonavit']);
-    $rfc =strtoupper( $param['rfc']);
-    $curp =strtoupper( $param['curp']);
-    $tsangre =strtoupper( $param['tsangre']);
-    $nivel_estudios =strtoupper( $param['nivel_estudios']);
-    $carrera =strtoupper( $param['carrera']);
-    $titulo =strtoupper( $param['titulo']);
-    $direccion =strtoupper( $param['direccion']);
-    $cruces =strtoupper( $param['cruces']);
-    $colonia =strtoupper( $param['colonia']);
-    $estado =strtoupper( $param['estado']);
-    $municipio =strtoupper( $param['municipio']);
-    $cp =strtoupper( $param['cp']);
-    $personal_email =strtoupper( $param['personal_email']);
-    $tcasa =strtoupper( $param['tcasa']);
-    $cell =strtoupper( $param['cell']);
-    $estado_civil =strtoupper( $param['estado_civil']);
-    $emergencias_nombre =strtoupper( $param['emergencias_nombre']);
-    $emergencias_parentesco =strtoupper( $param['emergencias_parentesco']);
-    $emergencias_cel =strtoupper( $param['emergencias_cel']);
-    $emergencias_oficina =strtoupper( $param['emergencias_oficina']);
-    $emergencias_casa =strtoupper( $param['emergencias_casa']);
-    $banco =strtoupper( $param['banco']);
-    $clabe =strtoupper( $param['clabe']);
-    $dia_pago =strtoupper( $param['dia_pago']);
-    $casa_propia =strtoupper( $param['casa_propia']);
-    $medio_transporte =strtoupper( $param['medio_transporte']);
+    $cia =utf8_decode(strtoupper( $param['cia']));
+    $nivel =utf8_decode(strtoupper( $param['nivel']));
+    $numero_emp =utf8_decode(strtoupper( $param['numero_emp']));
+    $status_rh =utf8_decode(strtoupper( $param['status_rh']));
+    $pagadora =utf8_decode(strtoupper( $param['pagadora']));
+    $razon_social =utf8_decode(strtoupper( $param['razon_social']));
+    $nombre =utf8_decode(strtoupper( $param['nombre']));
+    $segundo_nombre =utf8_decode(strtoupper( $param['segundo_nombre']));
+    $paterno =utf8_decode(strtoupper( $param['paterno']));
+    $materno =utf8_decode(strtoupper( $param['materno']));
+    $fingreso =utf8_decode(strtoupper( $param['fingreso']));
+    $puesto =utf8_decode(strtoupper( $param['puesto']));
+    $division =utf8_decode(strtoupper( $param['division']));
+    $departamento =utf8_decode(strtoupper( $param['departamento']));
+    $lugar_prestacion =utf8_decode(strtoupper( $param['lugar_prestacion']));
+    $horario =utf8_decode(strtoupper( $param['horario']));
+    $genero =utf8_decode(strtoupper( $param['genero']));
+    $fnacimiento =utf8_decode(strtoupper( $param['fnacimiento']));
+    $nacionalidad =utf8_decode(strtoupper( $param['nacionalidad']));
+    $estado_nacimiento =utf8_decode(strtoupper( $param['estado_nacimiento']));
+    $ciudad_nacimiento =utf8_decode(strtoupper( $param['ciudad_nacimiento']));
+    $numero_ss =utf8_decode(strtoupper( $param['numero_ss']));
+    $numero_infonavit =utf8_decode(strtoupper( $param['numero_infonavit']));
+    $rfc =utf8_decode(strtoupper( $param['rfc']));
+    $curp =utf8_decode(strtoupper( $param['curp']));
+    $tsangre =utf8_decode(strtoupper( $param['tsangre']));
+    $nivel_estudios =utf8_decode(strtoupper( $param['nivel_estudios']));
+    $carrera =utf8_decode(strtoupper( $param['carrera']));
+    $titulo =utf8_decode(strtoupper( $param['titulo']));
+    $direccion =utf8_decode(strtoupper( $param['direccion']));
+    $cruces =utf8_decode(strtoupper( $param['cruces']));
+    $colonia =utf8_decode(strtoupper( $param['colonia']));
+    $estado =utf8_decode(strtoupper( $param['estado']));
+    $municipio =utf8_decode(strtoupper( $param['municipio']));
+    $cp =utf8_decode(strtoupper( $param['cp']));
+    $personal_email =utf8_decode(strtoupper( $param['personal_email']));
+    $tcasa =utf8_decode(strtoupper( $param['tcasa']));
+    $cell =utf8_decode(strtoupper( $param['cell']));
+    $estado_civil =utf8_decode(strtoupper( $param['estado_civil']));
+    $emergencias_nombre =utf8_decode(strtoupper( $param['emergencias_nombre']));
+    $emergencias_parentesco =utf8_decode(strtoupper( $param['emergencias_parentesco']));
+    $emergencias_cel =utf8_decode(strtoupper( $param['emergencias_cel']));
+    $emergencias_oficina =utf8_decode(strtoupper( $param['emergencias_oficina']));
+    $emergencias_casa =utf8_decode(strtoupper( $param['emergencias_casa']));
+    $banco =utf8_decode(strtoupper( $param['banco']));
+    $clabe =utf8_decode(strtoupper( $param['clabe']));
+    $dia_pago =utf8_decode(strtoupper( $param['dia_pago']));
+    $casa_propia =utf8_decode(strtoupper( $param['casa_propia']));
+    $medio_transporte =utf8_decode(strtoupper( $param['medio_transporte']));
     $id = (isset($param['id']))?$param['id']:0;
     $qEmp = "call `sso`.`sso_setEmpleado`('$cia', 	'$nivel', 	'$numero_emp', 	'$status_rh', 	'$pagadora', 	'$razon_social', 	'$nombre', 	'$segundo_nombre', 	'$paterno', 	'$materno', 	'$fingreso', 	'$puesto', 	'$division', 	'$departamento', 	'$lugar_prestacion', 	'$horario', 	'$genero', 	'$fnacimiento', 	'$nacionalidad', 	'$estado_nacimiento', 	'$ciudad_nacimiento', 	'$numero_ss', 	'$numero_infonavit', 	'$rfc', 	'$curp', 	'$tsangre', 	'$nivel_estudios', 	'$carrera', 	'$titulo', 	'$direccion', 	'$cruces', 	'$colonia', 	'$estado', 	'$municipio', 	'$cp', 	'$personal_email', 	'$tcasa', 	'$cell', 	'$estado_civil', 	'$emergencias_nombre', 	'$emergencias_parentesco', 	'$emergencias_cel', 	'$emergencias_oficina', 	'$emergencias_casa', 	'$banco', 	'$clabe', 	'$dia_pago', 	'$casa_propia', 	'$medio_transporte', 	'$id', @result)";
     $flags = "select @result";
@@ -561,7 +571,7 @@ function set_datos_medicos($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
     $id = isset($param['id'])?$param['id']:'0';
-    $dm_descripcion=strtoupper($param['dm_descripcion']);
+    $dm_descripcion=utf8_decode(strtoupper($param['dm_descripcion']));
     $tipo=$param['dm_tipo'];
     $id_emp=$param['id_emp'];
     $id_par=$param['id_par'];
@@ -622,9 +632,9 @@ function set_familia($param) {
     $id = isset($param['id'])?$param['id']:'0';
     $fnacimiento = $param['fnacimiento'];
     $id_empleado = $param['id_empleado'];
-    $materno = $param['materno'];
-    $nombre = $param['nombre'];
-    $paterno = $param['paterno'];
+    $materno = utf8_decode(strtoupper($param['materno']));
+    $nombre = utf8_decode(strtoupper($param['nombre']));
+    $paterno = utf8_decode(strtoupper($param['paterno']));
     $tipo = $param['tipo_id'];
     $tsangre = $param['tsangre_id'];
     $q_FAM = "CALL `RH`.`set_familia`('$id','$token','$id_empleado','$tipo','$paterno','$materno','$nombre','$fnacimiento','$tsangre')";
@@ -799,7 +809,7 @@ function set_catalogo($param){
   $token = $param['accessToken'];
   if (valid_token($token)){
     $id = $param['id_catalogo'];
-    $descripcion = strtoupper($param['descripcion']);
+    $descripcion = utf8_decode(strtoupper($param['descripcion']));
     $id_ = $param['id'];
     $qget = "call `RH`.`get_catalogo_view`('$id',@view);";
     $flag = "select @view;";
@@ -872,10 +882,17 @@ function get_reporte($param){
     $result = dbquery($qReporte);
     $assoc = array();
     while($row = mysqli_fetch_assoc($result)){
+      foreach($row as $key => $value){
+        $value = htmlentities($value);
+        if(json_encode(array($value))==''){
+          $row[$key] = utf8_decode($value);
+        }
+      }
       $assoc[] = $row;
     }
+    //print_r($assoc);
     $export_file = excel_inflar($assoc);
-    return array('access'=> true, 'ls'=>$assoc, "execute"=>'download','argument'=> $export_file, "verb"=>'dwl_excel');
+    return array('access'=> true, "execute"=>'download','argument'=> $export_file, "verb"=>'dwl_excel');
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
@@ -885,7 +902,7 @@ function dwl_excel($param){
   if (valid_token($token)){
     $export_file = $param['argument'];
     excel_download($export_file);
-    unlink(export_file);
+    unlink($export_file);
     return array('access'=> true);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
@@ -895,6 +912,7 @@ $_sys;
 $_sys= new request();
 set_header();
 $_sys->param['apps'] = "recursoshumanos";//<---  deposita la app que usamos
+
 echo json_encode(array("app"=>$_sys->app,"param"=>$_sys->param, "fun" =>fun_api($_sys)));
 
 

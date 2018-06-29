@@ -33,7 +33,14 @@ export class ReportesComponent implements OnInit {
     this.reporteService.getReporte({id: id})
     .then((response: any) => {
       if (environment.debug) { console.log(response); }
+      if (response.fun.access) {
+        this.toExecute(response.fun);
+      }
     });
+  }
+
+  toExecute(data) {
+    this.reporteService.execute(data);
   }
   ngOnInit() {
   }
