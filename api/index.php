@@ -2,6 +2,8 @@
 session_start();
 
 require 'db_controller.php';
+
+require 'xls_controller.php';
 date_default_timezone_set("America/Mexico_City");
 
 class request{
@@ -787,6 +789,27 @@ function get_catalogo($param){
 
       return array("access"=>true,"ls"=>$array);
     }
+
+    return array("access"=>true,"msg"=>"Sin Elementos");
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function set_catalogo($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['id_catalogo'];
+    $descripcion = strtoupper($param['descripcion']);
+    $id_ = $param['id'];
+    $qget = "call `RH`.`get_catalogo_view`('$id',@view);";
+    $flag = "select @view;";
+    $array = array();
+    dbquery_call($qget,$flag,$array);
+    $exp = explode('.',$array['@view']);
+    $qget = "call ".implode(".set_",$exp)."('$id_','$descripcion');";
+    dbquery($qget);
+    $array=array();
+    return array("access"=>true);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
@@ -818,6 +841,52 @@ function get_festejos($param){
     }
     $ls['parientes']=$array;
     return array('access'=> true, 'ls'=>$ls);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+//Reportes
+
+function get_reportes($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $qReportes = "select * from RH.view_reportes_excel";
+    $result = dbquery($qReportes);
+    $ls = array();
+    while($row = mysqli_fetch_assoc($result)){
+      $ls[] = $row;
+    }
+    return array('access'=> true, 'ls'=>$ls);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function get_reporte($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id = $param['id'];
+    $qReporte = "call `RH`.`get_view_reportes`('$id',@view);";
+    $array = array();
+    dbquery_call($qReporte,"select @view",$array);
+    $qReporte = "select * from ".$array['@view'];
+    $result = dbquery($qReporte);
+    $assoc = array();
+    while($row = mysqli_fetch_assoc($result)){
+      $assoc[] = $row;
+    }
+    $export_file = excel_inflar($assoc);
+    return array('access'=> true, 'ls'=>$assoc, "execute"=>'download','argument'=> $export_file, "verb"=>'dwl_excel');
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function dwl_excel($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $export_file = $param['argument'];
+    excel_download($export_file);
+    unlink(export_file);
+    return array('access'=> true);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }

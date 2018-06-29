@@ -4,7 +4,7 @@
     <div class="form-group row">
         <label for="inputPassword" class="col-sm-3 col-form-label">Empleados</label>
         <div class="col-sm-7">
-          <select class="form-control" id=""  [(ngModel)]="selectedCatalogoId" (change)="loadCatalogo(selectedCatalogoId)" [doDisbled]="catalogos.length===0" >
+          <select class="form-control" id=""  [(ngModel)]="selectedCatalogoId" (change)="loadCatalogo(selectedCatalogoId)" [doDisbled]="catalogos.length===0||load" >
               <option selected="true" value="0">Refrescar</option>
               <option *ngFor="let empleado of catalogos; let i = index" value="{{empleado.id}}">{{empleado.descripcion}}</option>
             </select>
@@ -12,14 +12,47 @@
       </div>
   </div>
 </div>
+
 <div class="row" *ngIf="load">
     <div class="col-sm-10 offset-sm-1">
         <progressbar max="1" value="1" type="danger" [striped]="true" [animate]="true"></progressbar>
     </div>
     <br>
 </div>
+
 <div class="row" *ngIf="carga">
-  <div class="col-sm-8 offset-sm-2">
-      <button *ngFor="let dato of catalogo" type="button" class="btn btn-primary" style="margin: 0 10px 10px 0;">{{dato.descripcion}}</button>
+  <div class="col-sm-8 offset-sm-2" *ngIf="selectedCatalogoName!=='Dias Feriados'">
+      <form class="form-inline">
+          <div class="input-group mb-3" style="width: 100%;">
+              <input type="text" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2" name="descripcion" id="descripcion" #descripcion [(ngModel)]="data.descripcion">
+              <div class="input-group-append">
+                <button (click)="refresh()" class="btn btn-outline-primary" type="button" *ngIf="data.id > 0"><fa name="refresh" size="1x"></fa></button>
+                <button (click)="accion(template)" class="btn btn-outline-primary" type="button">{{btn}}</button>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="col-sm-8 offset-sm-2" *ngIf="selectedCatalogoName==='Dias Feriados'">
+      <form class="form-inline">
+          <div class="input-group mb-3" style="width: 100%;">
+              <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker name="descripcion" id="descripcion" #descripcion [(ngModel)]="data.descripcion">
+              <div class="input-group-append">
+                <button (click)="refresh()" class="btn btn-outline-primary" type="button" *ngIf="data.id > 0"><fa name="refresh" size="1x"></fa></button>
+                <button (click)="accion(template)" class="btn btn-outline-primary" type="button">{{btn}}</button>
+              </div>
+          </div>
+      </form>
   </div>
 </div>
+
+<div class="row" *ngIf="carga">
+  <div class="col-sm-8 offset-sm-2">
+      <button *ngFor="let dato of catalogo" type="button" class="btn btn-primary" style="margin: 0 10px 10px 0;" (click)="modificar(dato.id)" >{{dato.descripcion}}</button>
+  </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-body" style="text-align: center;">
+    <progressbar max="1" value="1" type="success" [striped]="true" [animate]="true"></progressbar>
+    </div>
+</ng-template>

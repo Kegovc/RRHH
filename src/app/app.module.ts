@@ -1,4 +1,3 @@
-import { CatalogoService } from './catalogos/catalogo.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,8 +25,11 @@ import { DatosMedicosComponent } from './empleados/datos-medicos/datos-medicos.c
 import { FamiliaComponent } from './empleados/familia/familia.component';
 import { EmpleadoService } from './empleados/empleado.service';
 import { MovimientoSalarialComponent } from './empleados/movimiento-salarial/movimiento-salarial.component';
-import { CatalogosComponent } from './catalogos/catalogos.component';
 import { ExpedientesComponent } from './empleados/expedientes/expedientes.component';
+import { CatalogosComponent } from './catalogos/catalogos.component';
+import { CatalogoService } from './catalogos/catalogo.service';
+import { ReportesComponent } from './reportes/reportes.component';
+import { ReporteService } from './reportes/reporte.service';
 
 
 
@@ -50,6 +52,7 @@ import { ExpedientesComponent } from './empleados/expedientes/expedientes.compon
     MovimientoSalarialComponent,
     CatalogosComponent,
     ExpedientesComponent,
+    ReportesComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ import { ExpedientesComponent } from './empleados/expedientes/expedientes.compon
     SessionGuard,
     EmpleadoService,
     CatalogoService,
+    ReporteService
   ],
   bootstrap: [AppComponent]
 })

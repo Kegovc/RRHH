@@ -31,7 +31,13 @@ export class CatalogoService {
     .toPromise();
   }
 
-  alerteFaltaDatos(mensaje) {
-    this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
+  setCatalogo(data) {
+    data.accessToken =  this.authService.getToken();
+    return this.http.post(`${environment.api}set_catalogo`, data)
+    .toPromise();
+  }
+
+  alerteFaltaDatos(mensaje = 'Revise que los datos están completos') {
+    this.toastr.error( mensaje, 'Datos en blanco');
   }
 }

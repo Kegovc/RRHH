@@ -1,3 +1,4 @@
+import { ReportesComponent } from './reportes/reportes.component';
 import { CatalogosComponent } from './catalogos/catalogos.component';
 import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
   {path: 'Empleados/Expediente', component: ExpedientesComponent, canActivate: [SessionGuard]},
   {path: 'Empleados/Familia', component: FamiliaComponent, canActivate: [SessionGuard]},
   {path: 'Catalogos', component: CatalogosComponent, canActivate: [SessionGuard]},
+  {path: 'Reportes', component: ReportesComponent, canActivate: [SessionGuard]},
   {path: 'logoff', component: LogoffComponent},
   {path: '**', component: HomeComponent, canActivate: [SessionGuard]}
 
