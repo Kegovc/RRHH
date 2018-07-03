@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { CollapseModule, BsDropdownModule, BsDatepickerModule, ModalModule, ProgressbarModule, TooltipModule } from 'ngx-bootstrap';
+import { CollapseModule, BsDropdownModule, BsDatepickerModule, ModalModule, ProgressbarModule, TooltipModule, PopoverModule } from 'ngx-bootstrap';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -62,6 +62,7 @@ import { ReporteService } from './reportes/reporte.service';
     BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
+    PopoverModule.forRoot(),
     AngularFontAwesomeModule,
     HttpClientModule,
     FormsModule,

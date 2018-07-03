@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from './../../shared/services/auth.service';
 import { EmpleadoService } from './../empleado.service';
 import { environment } from './../../../environments/environment';
@@ -72,6 +72,10 @@ export class ExpedientesComponent implements OnInit {
   public selectedEmpleadoId: number;
   public carga =  false;
 
+  public selectedFile = null;
+  @ViewChild('img') img_: ElementRef;
+  public old_avatar: any = {};
+
   constructor(
     private empleadoService: EmpleadoService,
     private authService: AuthService
@@ -105,6 +109,8 @@ export class ExpedientesComponent implements OnInit {
             this.data = response.fun.ls;
             this.load = false;
             this.carga = true;
+            this.old_avatar.alt = response.fun.avatar.alt;
+            this.old_avatar.src = `${environment.api}${response.fun.avatar.src}`;
           }
         });
     } else {
@@ -122,6 +128,35 @@ export class ExpedientesComponent implements OnInit {
       if (environment.debug) { console.log(response); }
       if (response.fun.access) {
         this.loadEmpleado(this.selectedEmpleadoId, true);
+      }
+    });
+  }
+
+  onFileSelected(event) {
+    this.selectedFile = <File>event.target.files[0];
+    console.log(this.selectedFile);
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.img_.nativeElement.src = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      this.img_.nativeElement.src = `${this.old_avatar.src}`;
+      this.img_.nativeElement.alt = `${this.old_avatar.alt}`;
+    }
+  }
+
+  onUpLoad() {
+    const fb = new FormData();
+    fb.append('image', this.selectedFile, this.selectedFile.name);
+    fb.append('id', `${this.selectedEmpleadoId}`);
+    this.empleadoService.setPictureExpediente(fb)
+    .then((response: any) => {
+      if (environment.debug) { console.log(response); }
+      if (response.fun.access) {
+        this.img_.nativeElement.src = `${environment.api}${response.fun.ls}`;
+        this.selectedFile = null;
       }
     });
   }

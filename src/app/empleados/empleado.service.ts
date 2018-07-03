@@ -83,6 +83,11 @@ export class EmpleadoService {
     .toPromise();
   }
 
+  setPictureExpediente(data: any) {
+    data.append('accessToken', this.authService.getToken());
+    return this.http.post(`${environment.api}set_picture_expediente`, data)
+    .toPromise();
+  }
   alerteFaltaDatos(mensaje) {
     this.toastr.error( 'Revise que los datos están completos', 'Datos en blanco');
   }

@@ -45,6 +45,12 @@ class request{
             foreach( $get_param as $clave => $valor){
               $param[$clave] = $valor;
             }
+            foreach( $_FILES as $clave => $valor){
+              $param['FILE_'][$clave] = $valor;
+            }
+            foreach( $_POST as $clave => $valor){
+              $param[$clave] = $valor;
+            }
             $this->param=$param;
 
         }
@@ -722,8 +728,13 @@ function get_expediente($param) {
     for($i=0;$i<strlen($temp);$i++){
       $array['documentos_internos'][$i]=!!$temp[$i];
     }
-
-    return array('access'=> true, "ls" => $array);
+    $avatar=array();
+    dbquery_call("call `RH`.`get_avatar_empleados`('$id',@path,@nombre);","select @path,@nombre;",$avatar);
+    $avatar['src'] = $avatar['@path'];
+    unset($avatar['@path']);
+    $avatar['alt'] = $avatar['@nombre'];
+    unset($avatar['@nombre']);
+    return array('access'=> true, "ls" => $array,"avatar"=>$avatar);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
@@ -753,6 +764,33 @@ function set_expediente($param) {
     dbquery_call($qExp,'select @msn',$array);
 
     return array('access'=> true, "ls" => $array);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function set_picture_expediente($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $error = array(0 => 'UPLOAD_ERR_OK', 1 => 'UPLOAD_ERR_INI_SIZE', 2 => 'UPLOAD_ERR_FORM_SIZE', 6 => 'UPLOAD_ERR_NO_TMP_DIR', 7 => 'UPLOAD_ERR_CANT_WRITE', 8 => 'UPLOAD_ERR_EXTENSION', 3 => 'UPLOAD_ERR_PARTIAL');
+    $id = $param['id'];
+    if($param['FILE_']['image']['error'] == 0){
+      $folder = "./";
+      $file_name = $param['FILE_']['image']['name'];
+      $path = $folder.$file_name;
+      $array=array();
+      $flag = 0;
+      dbquery_call("call `RH`.`get_avatar_empleados`('$id',@path,@nombre);","select @path,@nombre;",$array);
+      if(copy($param['FILE_']['image']['tmp_name'], $path)){
+        if(!!$array['@path']){
+          unlink($array['@path']);
+          $flag = 1;
+        }
+        dbquery("CALL  `RH`.`set_avatar_empleados`('$flag', '$id','$path', '$file_name');");
+          return array('access'=> true, 'ls'=>$path);
+      }
+      return array('access'=> false, 'execute'=>'reload',"msg"=>"don't upload file");
+    }
+    return array('access'=> false, 'execute'=>'reload',"msg"=>$error[$param['FILE_']['image']['error']]);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
@@ -902,7 +940,6 @@ function dwl_excel($param){
   if (valid_token($token)){
     $export_file = $param['argument'];
     excel_download($export_file);
-    unlink($export_file);
     return array('access'=> true);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");

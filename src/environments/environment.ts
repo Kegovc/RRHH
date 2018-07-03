@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  sso: '//localhost/SSO/',
-  api: '//localhost/RRHHSystem/api/',
+  sso: '//192.168.1.68/SSO/',
+  api: '//192.168.1.68/RRHHSystem/api/',
   debug: true
 };

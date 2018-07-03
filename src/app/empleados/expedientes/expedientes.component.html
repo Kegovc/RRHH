@@ -70,7 +70,14 @@
                       </table>
                   </div>
                   <div class="col-sm-6">
-                      <div style="width: 200px; height: 200px; background-color: grey; margin: auto;" ></div>
+                      <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)" accept="image/*">
+                      <div class="picture" (click)="fileInput.click()">
+                          <img class="image" #img *ngIf="!!selectedFile||!!old_avatar" src="{{old_avatar.src}}" alt="{{old_avatar.alt}}">
+                          <div class="overlay">
+                              <div class="text">Subir Foto</div>
+                            </div>
+                      </div>
+                      <button *ngIf="!!selectedFile" class="btn btn-info" (click)="onUpLoad()">Guardar Foto</button>
                   </div>
               </div>
               <div class="row" style="text-align: center;">

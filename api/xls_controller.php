@@ -237,8 +237,8 @@ stream_wrapper_register("xlsfile", "xlsStream")
 
 
 function excel_inflar($assoc){
-
-  $export_file = "xlsfile://tmp_".date("YmdHis")."/example.xls";
+  $name="tmp_".date("YmdHis");
+  $export_file = "xlsfile://$name/example.xls";
   $fp = fopen($export_file, "wb");
   if (!is_resource($fp))
   {
@@ -247,10 +247,11 @@ function excel_inflar($assoc){
 
   fwrite($fp, serialize($assoc));
   fclose($fp);
-  return $export_file;
+  return $name;
 }
 
-function excel_download($export_file){
+function excel_download($name){
+  $export_file = "xlsfile://$name/example.xls";
   header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
   header ("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
   header ("Cache-Control: no-cache, must-revalidate");
@@ -259,6 +260,7 @@ function excel_download($export_file){
   header ("Content-Disposition: attachment; filename=\"" . date("Ymdhis").'.xls' . "\"" );
   header ("Content-Description: PHP/INTERBASE Generated Data" );
   readfile($export_file);
+  unlink($name);
   exit;
 }
 
