@@ -19,6 +19,15 @@
     <br>
 </div>
 <div class="row" *ngIf="carga">
+    <div class="col-sm-6" style="text-align: center;">
+      <button class="btn btn-success" (click)="printPDF(1)" >Portada en PDF</button>
+    </div>
+    <div class="col-sm-6" style="text-align: center;">
+      <button class="btn btn-success" (click)="printPDF(0)" >CheckList PDF</button>
+    </div>
+    <br>
+</div>
+<div class="row" *ngIf="carga">
   <div class="col-sm-10 offset-sm-1">
     <div class="row">
       <div class="col-sm-12">

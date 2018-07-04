@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+// tslint:disable-next-line:max-line-length
 import { CollapseModule, BsDropdownModule, BsDatepickerModule, ModalModule, ProgressbarModule, TooltipModule, PopoverModule } from 'ngx-bootstrap';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';

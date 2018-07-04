@@ -161,6 +161,14 @@ export class ExpedientesComponent implements OnInit {
     });
   }
 
+  printPDF(tipo) {
+    const b = document.createElement('a');
+    b.setAttribute('href', `${environment.api}generate_pdf_expediente
+    ?argument=${this.selectedEmpleadoId}&accessToken=${this.authService.getToken()}&tipo=${tipo}`);
+    b.setAttribute('target', `_blanck`);
+    b.click();
+  }
+
   ngOnInit() {
   }
 

@@ -4,6 +4,8 @@ session_start();
 require 'db_controller.php';
 
 require 'xls_controller.php';
+
+require 'pdf_controller.php';
 date_default_timezone_set("America/Mexico_City");
 
 class request{
@@ -793,6 +795,37 @@ function set_picture_expediente($param) {
     return array('access'=> false, 'execute'=>'reload',"msg"=>$error[$param['FILE_']['image']['error']]);
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function generate_pdf_expediente($param) {
+  $tipo = $param['tipo'];
+  $q_emp = "select * from `sso`.`view_data_empleado` where id = '12';";
+  $result = dbquery($q_emp);
+  $array = mysqli_fetch_assoc($result);
+  $date=date_create($array['fingreso']);
+  $array['fingreso'] = date_format($date,"d/m/Y");
+  $date=date_create($array['fnacimiento']);
+  $array['fnacimiento'] = date_format($date,"d/m/Y");
+  $check;
+  for($a=0;$a<strlen($array['documentos_personales']);$a++){
+    if($array['documentos_personales'][$a]=='1'){
+      $check[]='x';
+    } else {
+      $check[]='';
+    }
+  }
+  for($a=0;$a<strlen($array['documentos_internos']);$a++){
+    if($array['documentos_internos'][$a]=='1'){
+      $check[]='x';
+    } else {
+      $check[]='';
+    }
+  }
+  # Contenido HTML del documento que queremos generar en PDF.
+  $html = ($tipo==1) ?pdftemplate("./dom-template/expediente-template.html",$array):pdftemplate("./dom-template/checklist-template.html",$check);
+  pdfrender($html,'cosos',false,true);
+  exit;
+
 }
 // Catalogo
 
