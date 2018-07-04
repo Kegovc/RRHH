@@ -801,7 +801,8 @@ function generate_pdf_expediente($param) {
   $token = $param['accessToken'];
   if (valid_token($token)){
     $tipo = $param['tipo'];
-    $q_emp = "select * from `sso`.`view_data_empleado` where id = '12';";
+    $id = $param['argument'];
+    $q_emp = "select * from `sso`.`view_data_empleado` where id = '$id';";
     $result = dbquery($q_emp);
     $array = mysqli_fetch_assoc($result);
     $date=date_create($array['fingreso']);
@@ -980,6 +981,56 @@ function dwl_excel($param){
   }
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
+
+// Solicitud de Vacaciones
+
+function get_info_vacaciones($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $q_emp = "select id from sso.view_token_access where accessToken = '$token';";
+    $result = dbquery($q_emp);
+    $row = mysqli_fetch_assoc($result);
+    $id = $row['id'];
+    $q_emp = "select * from `sso`.`view_data_empleado` where id = '$id';";
+    $result = dbquery($q_emp);
+    $array = mysqli_fetch_assoc($result);
+    foreach($array as $key => $value){
+      if(json_encode(array($value))==''){
+        $array[$key] = utf8_encode($value);
+      }
+    }
+    ksort($array);
+    $a_fecha = explode('-', $array['fingreso']);
+    $años = date('Y');
+    $fecha = strtotime($a_fecha[2]."-".$a_fecha[1]."-".$años);
+    $ingreso = strtotime($a_fecha[2]."-".$a_fecha[1]."-".$a_fecha[0]);
+    $now = strtotime(date("d-m-Y",time()));
+    $años_ = date("Y",$now)-date("Y",$ingreso);
+
+    if($now < $fecha){
+      $años --;
+    }
+    $ls = array(
+      'periodos' => array(
+          $a_fecha[2].'-'.$a_fecha[1].'-'.($años-1)." al ".($a_fecha[2]-1).'-'.$a_fecha[1].'-'.($años),
+          $a_fecha[2].'-'.$a_fecha[1].'-'.$años." al ".($a_fecha[2]-1).'-'.$a_fecha[1].'-'.($años+1),
+          $a_fecha[2].'-'.$a_fecha[1].'-'.($años+1)." al ".($a_fecha[2]-1).'-'.$a_fecha[1].'-'.($años+2),
+        ),
+      'periodos_name' => array(
+        'Actual',
+        'Extemporane',
+        'Adelantado'
+      ),
+      'años'=>$años_
+    );
+
+    return array('access'=> true,'ls'=>$ls,'array'=>$array);
+  }
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+
+
 
 $_sys;
 $_sys= new request();

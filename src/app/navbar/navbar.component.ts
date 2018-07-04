@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit {
         this.authService.executeAccess(response.fun.execute);
       } else {
         this.user = response.fun.ls;
+        this.authService.setPerfil(this.user.profi);
       }
     });
   }
@@ -45,5 +46,8 @@ export class NavbarComponent implements OnInit {
           arrayURL[1] = 'Inicio';
         }
         this.navItem = arrayURL[1];
+  }
+  permisos(perfil) {
+    return (this.user.profi === perfil);
   }
 }

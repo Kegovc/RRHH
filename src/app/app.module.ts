@@ -1,3 +1,4 @@
+import { PerfilGuard } from './shared/guards/perfil.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,6 +32,7 @@ import { CatalogosComponent } from './catalogos/catalogos.component';
 import { CatalogoService } from './catalogos/catalogo.service';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReporteService } from './reportes/reporte.service';
+import { SolicitudVacacionesComponent } from './solicitud-vacaciones/solicitud-vacaciones.component';
 
 
 
@@ -54,6 +56,7 @@ import { ReporteService } from './reportes/reporte.service';
     CatalogosComponent,
     ExpedientesComponent,
     ReportesComponent,
+    SolicitudVacacionesComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +78,7 @@ import { ReporteService } from './reportes/reporte.service';
   providers: [
     AuthService,
     SessionGuard,
+    PerfilGuard,
     EmpleadoService,
     CatalogoService,
     ReporteService

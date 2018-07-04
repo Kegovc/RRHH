@@ -87,9 +87,6 @@ export class ExpedientesComponent implements OnInit {
       if (response.fun.access) {
         this.empleados = response.fun.ls;
         if (environment.debug) { console.log(this.empleados); }
-        this.selectedEmpleadoId = 0;
-        this.selectedEmpleadoId = 12;
-        this.loadEmpleado(12);
       } else {
         this.authService.executeAccess(response.fun.execute);
       }

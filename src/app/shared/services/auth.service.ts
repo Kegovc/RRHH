@@ -1,13 +1,22 @@
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
 
+  public perfil = new BehaviorSubject('');
+
   constructor(
     private http: HttpClient
   ) { }
+  // PERFIL SSO
+
+  setPerfil(perfil_: string) {
+    this.perfil.next(perfil_);
+  }
+
   // WEB API
   attackSet() {
     return this.http.get(`${environment.api}attack_set`)

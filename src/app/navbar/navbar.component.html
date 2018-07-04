@@ -12,7 +12,7 @@
           <a class="nav-link" routerLink="">Inicio <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item"  id="Empleados" [ActiveNavItem]="navItem">
-          <div class="btn-group" dropdown>
+          <div class="btn-group" dropdown *ngIf="permisos('ADMIN')">
             <span id="button-disabled-item" dropdownToggle class="nav-link dropdown-toggle"
                     aria-controls="dropdown-disabled-item">
                     Empleados <span class="caret"></span>
@@ -33,13 +33,16 @@
 
 
 
-        <li class="nav-item"  id="Reportes" [ActiveNavItem]="navItem">
+        <li class="nav-item"  id="Reportes" [ActiveNavItem]="navItem" *ngIf="permisos('ADMIN')">
           <a class="nav-link" routerLink="Reportes">Reportes</a>
         </li>
-        <li class="nav-item"  id="Vacaciones" [ActiveNavItem]="navItem">
+        <li class="nav-item"  id="Solicitud-Vacaciones" [ActiveNavItem]="navItem">
+          <a class="nav-link" routerLink="Solicitud-Vacaciones">Solicitud de vacaciones</a>
+        </li>
+        <li class="nav-item"  id="Vacaciones" [ActiveNavItem]="navItem" *ngIf="permisos('ADMIN')">
           <a class="nav-link" routerLink="Vacaciones">Vacaciones</a>
         </li>
-        <li class="nav-item"  id="Catalogos" [ActiveNavItem]="navItem">
+        <li class="nav-item"  id="Catalogos" [ActiveNavItem]="navItem" *ngIf="permisos('ADMIN')">
           <a class="nav-link" routerLink="Catalogos">Catalogos</a>
         </li>
       </ul>

@@ -1,0 +1,52 @@
+<br>
+
+<div class="row" *ngIf="load">
+    <div class="col-sm-10 offset-sm-1">
+        <progressbar max="1" value="1" type="danger" [striped]="true" [animate]="true"></progressbar>
+    </div>
+    <br>
+</div>
+
+<div class="row" *ngIf="carga">
+  <div class="offset-sm-1 col-sm-10">
+    <h3><b>SOLICITUD DE VACACIONES</b></h3>
+    <br><br><br>
+
+    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Nombre:            </b></label><span>{{usr.nombre}} {{usr.segundo_nombre}} {{usr.paterno}} {{usr.materno}}</span></p>
+    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Puesto:            </b></label><span>{{usr.puesto}}</span></p>
+    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Fecha de ingreso:  </b></label><span>{{usr.fingreso}}</span></p>
+    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Fecha de solicitud:</b></label><span>{{hoy}}</span></p>
+
+    <br><br>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días de vacaciones que corresponden:</b></label>
+      <div class="col-sm-3">
+        <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_corresponde" >
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-2 col-form-label"><b>Del periodo:</b></label>
+      <div class="col-sm-4">
+        <select class="form-control" [(ngModel)]="data.periodo" (change)="vence()" >
+          <option *ngFor="let periodo of data.periodos; let i = index" value="{{i}}">{{periodo}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-5 col-form-label"><b>Días de vacaciones disfrutados hasta ahora: </b></label>
+      <div class="col-sm-2">
+        <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_disfrutados">
+      </div>
+    </div>
+    <div class="form-group row">
+        <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días de vacaciones por disfrutar: </b></label>
+        <div class="col-sm-2">
+          <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_corresponde" value="data.dias_corresponde-data.dias_disfrutados">
+        </div>
+        <span for="staticEmail" class="col-sm-5 col-form-label"><b>Fecha de vencimiento:</b> {{vence_}}</span>
+    </div>
+  </div>
+</div>
+<div class="col-xs-12 col-12 col-md-4 form-group"  style="margin: auto;">
+  <input type="text" placeholder="Daterangepicker" (click)="rango()" [(ngModel)]="rango_" name="rango" class="form-control" bsDaterangepicker>
+</div>
