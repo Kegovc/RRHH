@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   sso: '//portal/SSO/',
-  api: '//localhost/RRHH/api/',
+  api: '//portal/RRHH/api/',
   debug: false
 };

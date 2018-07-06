@@ -1215,6 +1215,14 @@ function generate_pdf_solicitud_vacaciones($param) {
     exit;
   }
 }
+function set_acepto_solicitud($param){
+  $tipo = $param['tipo'];
+  $id = $param['id'];
+  $folio=$param['argumento'];
+  //dbquery(
+    echo "call `RH`.`set_acepto_vacaciones`('$folio','$id','$tipo')";
+  //);
+}
 
 
 
