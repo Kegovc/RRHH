@@ -18,4 +18,9 @@ export class VacacionesService {
     return this.http.post(`${environment.api}get_info_vacaciones`, data)
     .toPromise();
   }
+  setSolicitudVacaciones(data) {
+    data.accessToken = this.authService.getToken();
+    return this.http.post(`${environment.api}set_solicitud`, data)
+    .toPromise();
+  }
 }

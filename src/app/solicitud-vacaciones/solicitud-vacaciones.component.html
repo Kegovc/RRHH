@@ -11,17 +11,11 @@
   <div class="offset-sm-1 col-sm-10">
     <h3><b>SOLICITUD DE VACACIONES</b></h3>
     <br><br><br>
-
-    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Nombre:            </b></label><span>{{usr.nombre}} {{usr.segundo_nombre}} {{usr.paterno}} {{usr.materno}}</span></p>
-    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Puesto:            </b></label><span>{{usr.puesto}}</span></p>
-    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Fecha de ingreso:  </b></label><span>{{usr.fingreso}}</span></p>
-    <p style="margin: 0px;"><label class="col-sm-2 col-form-label"><b>Fecha de solicitud:</b></label><span>{{hoy}}</span></p>
-
     <br><br>
     <div class="form-group row">
       <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días de vacaciones que corresponden:</b></label>
       <div class="col-sm-3">
-        <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_corresponde" >
+        <input type="number" readonly  MyNumberOnly class="form-control-plaintext" [(ngModel)]="corresponde_" >
       </div>
     </div>
     <div class="form-group row">
@@ -31,22 +25,93 @@
           <option *ngFor="let periodo of data.periodos; let i = index" value="{{i}}">{{periodo}}</option>
         </select>
       </div>
+      <div class="col-sm-4">
+        {{tipo}}
+      </div>
     </div>
     <div class="form-group row">
       <label for="staticEmail" class="col-sm-5 col-form-label"><b>Días de vacaciones disfrutados hasta ahora: </b></label>
       <div class="col-sm-2">
-        <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_disfrutados">
+        <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.diasDisfrutados" (change)="diasRestante()">
       </div>
     </div>
     <div class="form-group row">
         <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días de vacaciones por disfrutar: </b></label>
         <div class="col-sm-2">
-          <input type="number" MyNumberOnly class="form-control" [(ngModel)]="data.dias_corresponde" value="data.dias_corresponde-data.dias_disfrutados">
+          <input type="number" readonly  MyNumberOnly class="form-control-plaintext" [(ngModel)]="data.diasRestante" >
         </div>
         <span for="staticEmail" class="col-sm-5 col-form-label"><b>Fecha de vencimiento:</b> {{vence_}}</span>
     </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días que se solicitan de vacaciones: </b></label>
+      <div class="col-sm-2">
+        <input type="number" readonly  MyNumberOnly class="form-control-plaintext" [(ngModel)]="data.diasSolicitados" (change)="diasRestante()">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Días que restan por disfrutar: 	</b></label>
+      <div class="col-sm-2">
+        <input type="number" readonly  MyNumberOnly class="form-control-plaintext" [(ngModel)]="data.diasRestan" (change)="diasRestante()">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-5 col-form-label"><b>El Colaborador planea tomar sus vacaciones </b></label>
+      <div class="col-sm-2">
+          <button class="btn btn-success" (click)="fecha.click()" ><fa name="calendar" size="1x"></fa></button>
+      </div>
+      <input style="width: 0px" type="text" #fecha readonly   class="form-control-plaintext" [(ngModel)]="rango_" name="rango" bsDaterangepicker>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-6 col-form-label"><b>A partir del día </b>{{del.dia}} <b> de </b> {{del.mes}} <b> de </b>{{del.anio}}</label>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-6 col-form-label"><b>Regresando a laborar el día </b>{{al.dia}} <b> de </b> {{al.mes}} <b> de </b>{{al.anio}}</label>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-2 col-form-label"><b>Observaciones:</b></label>
+      <div class="col-sm-10">
+        <input type="text"  class="form-control" [(ngModel)]="data.observaciones" >
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Nombre del Superior que autoriza: </b></label>
+      <div class="col-sm-8">
+          <select class="form-control" [(ngModel)]="data.superior" >
+              <option *ngFor="let empleado of data.empleados" value="{{empleado.id}}">{{empleado.nombre}} {{empleado.paterno}} </option>
+          </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Nombre del Suplente o Back up: </b></label>
+      <div class="col-sm-8">
+          <select class="form-control" [(ngModel)]="data.back1" >
+              <option *ngFor="let empleado of data.empleados" value="{{empleado.id}}">{{empleado.nombre}} {{empleado.paterno}} </option>
+          </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Nombre del Suplente o Back up: </b></label>
+      <div class="col-sm-8">
+          <select class="form-control" [(ngModel)]="data.back2" >
+              <option value="0">N/A</option>
+              <option *ngFor="let empleado of data.empleados" value="{{empleado.id}}">{{empleado.nombre}} {{empleado.paterno}} </option>
+          </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-4 col-form-label"><b>Nombre del Suplente o Back up: </b></label>
+      <div class="col-sm-8">
+          <select class="form-control" [(ngModel)]="data.back3" >
+              <option value="0">N/A</option>
+              <option *ngFor="let empleado of data.empleados" value="{{empleado.id}}">{{empleado.nombre}} {{empleado.paterno}} </option>
+          </select>
+      </div>
+    </div>
+    <br><br><br>
+    <br><br><br>
+    <div class="col-sm-3 offset-sm-8"><button class="btn btn-primary" (click)="generarSolicitud()">Generar</button></div>
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
   </div>
-</div>
-<div class="col-xs-12 col-12 col-md-4 form-group"  style="margin: auto;">
-  <input type="text" placeholder="Daterangepicker" (click)="rango()" [(ngModel)]="rango_" name="rango" class="form-control" bsDaterangepicker>
 </div>

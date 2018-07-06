@@ -60,6 +60,49 @@ class request{
 
 }
 
+function dias_que_corresponde($años_){
+  switch($años_){
+    case '1': case '2': case '3':
+      $dias = 10;
+      break;
+    case '4':
+      $dias = 12;
+      break;
+    case '5': case '6': case '7': case '8': case '9':
+      $dias = 14;
+      break;
+    case '10': case '11': case '12': case '13': case '14':
+      $dias = 16;
+      break;
+    case '15': case '16': case '17': case '18': case '19':
+      $dias = 18;
+      break;
+    case '20':
+      $dias = 20;
+      break;
+    default:
+      $dias = 0;
+      break;
+  }
+
+
+  switch($años_){
+    case '5':
+      $extras = 3;
+      break;
+    case '10':
+      $extras = 4;
+      break;
+    case '15':
+      $extras = 5;
+      break;
+    default:
+      $extras = 0;
+      break;
+  }
+  return $extras + $dias;
+}
+
 function get_ip(){
       $ip;
       if (isset($_SERVER['HTTP_CLIENT_IP'])){
@@ -991,7 +1034,7 @@ function get_info_vacaciones($param){
     $result = dbquery($q_emp);
     $row = mysqli_fetch_assoc($result);
     $id = $row['id'];
-    $q_emp = "select * from `sso`.`view_data_empleado` where id = '$id';";
+    $q_emp = "select *  from `sso`.`view_data_empleado` where id = '$id';";
     $result = dbquery($q_emp);
     $array = mysqli_fetch_assoc($result);
     foreach($array as $key => $value){
@@ -1003,13 +1046,33 @@ function get_info_vacaciones($param){
     $a_fecha = explode('-', $array['fingreso']);
     $años = date('Y');
     $fecha = strtotime($a_fecha[2]."-".$a_fecha[1]."-".$años);
-    $ingreso = strtotime($a_fecha[2]."-".$a_fecha[1]."-".$a_fecha[0]);
     $now = strtotime(date("d-m-Y",time()));
-    $años_ = date("Y",$now)-date("Y",$ingreso);
+
+    $dteStart = new DateTime($array['fingreso']);
+    $dteEnd   = new DateTime('now');
+
+    $dteDiff  = $dteStart->diff($dteEnd);
+
+    $años_ = $dteDiff->format("%y");
 
     if($now < $fecha){
       $años --;
     }
+    $result = dbquery("select * from `sso`.`view_empleados` order by nombre;");
+    $empleados;
+    while($row = mysqli_fetch_assoc($result)){
+      $empleados[] = $row;
+    }
+    $result = dbquery("select * from RH.view_diasferiados;");
+    $dias_feriados;
+    while($row = mysqli_fetch_assoc($result)){
+      $dias_feriados[] = $row['descripcion'];
+    }
+
+    $array_fecha = explode('-', $array['fnacimiento']);
+    $dias_feriados[] = date('Y')."-".$array_fecha[1]."-".$array_fecha[2];
+    $dias_feriados[] = (date('Y')+1)."-".$array_fecha[1]."-".$array_fecha[2];
+
     $ls = array(
       'periodos' => array(
           $a_fecha[2].'-'.$a_fecha[1].'-'.($años-1)." al ".($a_fecha[2]-1).'-'.$a_fecha[1].'-'.($años),
@@ -1017,11 +1080,19 @@ function get_info_vacaciones($param){
           $a_fecha[2].'-'.$a_fecha[1].'-'.($años+1)." al ".($a_fecha[2]-1).'-'.$a_fecha[1].'-'.($años+2),
         ),
       'periodos_name' => array(
-        'Actual',
         'Extemporane',
+        '',
         'Adelantado'
       ),
-      'años'=>$años_
+      'años'=>$años_,
+      'dias'=> array(
+        dias_que_corresponde($años_-1),
+        dias_que_corresponde($años_),
+        dias_que_corresponde($años_+1)
+      ),
+      'empleados' => $empleados,
+      'diasFeriados' => $dias_feriados,
+      'id_emp' => $id
     );
 
     return array('access'=> true,'ls'=>$ls,'array'=>$array);
@@ -1029,6 +1100,40 @@ function get_info_vacaciones($param){
   return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
 }
 
+function set_solicitud($param){
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    $id_emp = $param['id_emp'];
+    $periodo = str_replace(' al ','/',$param['periodos'][$param['periodo']]);
+    $dias_solicitados = $param['diasSolicitados'];
+    $dias_disfrutados = $param['diasDisfrutados'];
+    $dias_disponibles = $param['diasRestante'];
+    $fecha_del = $param['rango'][0];
+    $fecha_al = $param['rango'][1];
+    $id_bck1 = $param['back1'];
+    $id_bck2 = $param['back2'];
+    $id_bck3 = $param['back3'];
+    $superior = $param['superior'];
+    $observaciones = $param['observaciones'];
+    $folio = date("YmdHis").$id;
+
+    $q_solicitud ="call `RH`.`set_solicitud_vacaciones`('$folio', '$id_emp', '$periodo', '$dias_solicitados', '$dias_disponibles', '$dias_disfrutados', '$fecha_del', '$fecha_al', '$id_bck1', '$id_bck2', '$id_bck3', '$superior', '$observaciones')";
+    $result = dbquery($q_solicitud);
+    return array('access'=>$result, 'folio'=>$folio);
+  }
+
+  return array('access'=> false, 'execute'=>'toSSO',"msg"=>"Token not found");
+}
+
+function generate_pdf_solicitud_vacaciones($param) {
+  $token = $param['accessToken'];
+  if (valid_token($token)){
+    # Contenido HTML del documento que queremos generar en PDF.
+    $html = pdftemplate("./dom-template/vacaciones-template.html",array('nombre'=>'hola'));
+    pdfrender($html,'cosos',false,true);
+    exit;
+  }
+}
 
 
 
