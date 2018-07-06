@@ -20,6 +20,7 @@ export class VacacionesService {
   }
   setSolicitudVacaciones(data) {
     data.accessToken = this.authService.getToken();
+    data.api = environment.api;
     return this.http.post(`${environment.api}set_solicitud`, data)
     .toPromise();
   }

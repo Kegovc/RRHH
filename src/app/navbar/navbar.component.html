@@ -39,9 +39,6 @@
         <li class="nav-item"  id="Solicitud-Vacaciones" [ActiveNavItem]="navItem">
           <a class="nav-link" routerLink="Solicitud-Vacaciones">Solicitud de vacaciones</a>
         </li>
-        <li class="nav-item"  id="Vacaciones" [ActiveNavItem]="navItem" *ngIf="permisos('ADMIN')">
-          <a class="nav-link" routerLink="Vacaciones">Vacaciones</a>
-        </li>
         <li class="nav-item"  id="Catalogos" [ActiveNavItem]="navItem" *ngIf="permisos('ADMIN')">
           <a class="nav-link" routerLink="Catalogos">Catalogos</a>
         </li>

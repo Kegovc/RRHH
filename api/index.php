@@ -1116,9 +1116,59 @@ function set_solicitud($param){
     $superior = $param['superior'];
     $observaciones = $param['observaciones'];
     $folio = date("YmdHis").$id;
+    $api ="http:".$param['api']."set_acepto_solicitud?argumento=$folio";
 
-    $q_solicitud ="call `RH`.`set_solicitud_vacaciones`('$folio', '$id_emp', '$periodo', '$dias_solicitados', '$dias_disponibles', '$dias_disfrutados', '$fecha_del', '$fecha_al', '$id_bck1', '$id_bck2', '$id_bck3', '$superior', '$observaciones')";
-    $result = dbquery($q_solicitud);
+    //$q_solicitud ="call `RH`.`set_solicitud_vacaciones`('$folio', '$id_emp', '$periodo', '$dias_solicitados', '$dias_disponibles', '$dias_disfrutados', '$fecha_del', '$fecha_al', '$id_bck1', '$id_bck2', '$id_bck3', '$superior', '$observaciones')";
+
+    $result = true;//dbquery($q_solicitud);
+    $bck1_emp="";
+    $bck2_emp="";
+    $bck3_emp="";
+    $super_emp="";
+    $emp="";
+
+
+    if($result) {
+      foreach($param['empleados'] as $key=>$value) {
+        if($value->id==$id_bck1){
+          $bck1_emp = $value;
+        }
+        if($value->id==$id_bck2){
+          $bck2_emp = $value;
+        }
+        if($value->id==$id_bck3){
+          $bck3_emp = $value;
+        }
+        if($value->id==$superior){
+          $super_emp = $value;
+        }
+        if($value->id==$id_emp){
+          $emp = $value;
+        }
+      }
+      if($bck1_emp!=""){
+        $asunto = 'Solicitud de Back Up para vacaciones de '.$emp->nombre.' '.$emp->paterno;
+        $body = utf8_encode("Por la presente se le hace saber, que el compañero $emp->nombre $emp->paterno tomara vacaciones del $fecha_del al $fecha_al, y solicita que usted le cubra en ese periodo. <a src=\"$api&id=$bck1_emp->id&tipo=bk1\">Acepto</a>");
+        dbquery("call  `RH`.`set_email_out`('$bck1_emp->email','$asunto','$body')");
+      }
+      if($bck2_emp!=""){
+        $asunto = 'Solicitud de Back Up para vacaciones de '.$emp->nombre.' '.$emp->paterno;
+        $body = utf8_encode("Por la presente se le hace saber, que el compañero $emp->nombre $emp->paterno tomara vacaciones del $fecha_del al $fecha_al, y solicita que usted le cubra en ese periodo. <a src=\"$api&id=$bck2_emp->id&tipo=bk2\">Acepto</a>");
+        dbquery("call  `RH`.`set_email_out`('$bck2_emp->email','$asunto','$body')");
+      }
+      if($bck3_emp!=""){
+        $asunto = 'Solicitud de Back Up para vacaciones de '.$emp->nombre.' '.$emp->paterno;
+        $body = utf8_encode("Por la presente se le hace saber, que el compañero $emp->nombre $emp->paterno tomara vacaciones del $fecha_del al $fecha_al, y solicita que usted le cubra en ese periodo. <a src=\"$api&id=$bck3_emp->id&tipo=bk3\">Acepto</a>");
+        dbquery("call  `RH`.`set_email_out`('$bck3_emp->email','$asunto','$body')");
+      }
+      if($super_emp!=""){
+        $asunto = 'Solicitud de Back Up para vacaciones de '.$emp->nombre.' '.$emp->paterno;
+        $body = utf8_encode("Por la presente se le hace saber, que el compañero $emp->nombre $emp->paterno tomara vacaciones del $fecha_del al $fecha_al, y solicita su Autorizacion. <a src=\"$api&id=$super_emp->id&tipo=sup\">Acepto</a>");
+        dbquery("call  `RH`.`set_email_out`('$super_emp->email','$asunto','$body')");
+      }
+
+    }
+
     return array('access'=>$result, 'folio'=>$folio);
   }
 
@@ -1128,8 +1178,39 @@ function set_solicitud($param){
 function generate_pdf_solicitud_vacaciones($param) {
   $token = $param['accessToken'];
   if (valid_token($token)){
+    $folio = $param['argument'];
+    $q_solicitud = "select * from `RH`.`view_vacaciones` where folio = '$folio';";
+    $result = dbquery($q_solicitud);
+    $array = mysqli_fetch_assoc($result);
+    $vence = explode('/', $array['periodo']);
+    $array['vence'] = $vence[1];
+    $array['periodo'] = str_replace('/', ' al ',$array['periodo']);
+    $mes  = array(
+      '',
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    );
+    $del = explode('-',$array['fecha_del']);
+    $array['del_anio']=$del[0];
+    $array['del_mes']=$mes[$del[1]*1];
+    $array['del_dia']=$del[2];
+    $al = explode('-',$array['fecha_al']);
+    $array['al_anio']=$al[0];
+    $array['al_mes']=$mes[$al[1]*1];
+    $array['al_dia']=$al[2];
+
     # Contenido HTML del documento que queremos generar en PDF.
-    $html = pdftemplate("./dom-template/vacaciones-template.html",array('nombre'=>'hola'));
+    $html = pdftemplate("./dom-template/vacaciones-template.html",$array);
     pdfrender($html,'cosos',false,true);
     exit;
   }

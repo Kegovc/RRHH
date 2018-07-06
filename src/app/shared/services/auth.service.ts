@@ -54,12 +54,12 @@ export class AuthService {
     if (environment.debug) { console.log(execute); }
     switch (execute) {
       case 'toSSO': {
-        // window.location.href = environment.sso;
+        window.location.href = environment.sso;
         break;
       }
       case 'logoff': {
-        // this.clearToken();
-        // window.location.href = `${environment.sso}close`;
+        this.clearToken();
+        window.location.href = `${environment.sso}close`;
         break;
       }
       default:
